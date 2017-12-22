@@ -1,0 +1,48 @@
+% A workaround to allow relative paths in included subfiles
+% that are to be compiled separately
+% See https://tex.stackexchange.com/questions/153312/subfiles-inside-a-subfile-using-relative-paths
+\providecommand{\main}{..}
+\documentclass[\main/thesis.tex]{subfiles}
+
+\begin{document}
+
+\chapter{A Review of Complex Network Analysis}
+
+Here is a test reference~\cite{Knuth68:art_of_programming}.
+These additional lines have been added just to demonstrate the spacing
+for the rest of the document. Spacing will differ between the typeset main
+document, and typeset individual documents, as the commands
+to change spacing for the body of the thesis are only in the main document.
+
+\section{Link Prediction}\label{previous:link-prediction}
+Link prediction is the problem of determining future or missing associations between entities in complex networks based on observed links. Because of its broad applications in different domains, link prediction has attracted increasing attention from computer scientists, biologists and physicists recently. Link prediction can be categorized into two classes: one is forecasting the future links, which can be used to help on-line social network users find new friends; the other is determining the hidden or unobserved relationships between nodes, such as protein-protein interaction networks and food webs. The discovery of interaction links in biological networks is usually expensive, therefore, finding the most promising latent links instead of checking all possible links is important in reducing experimental costs.
+
+In the past decade, many works have been done about link prediction in certain graphs, graphs where the network structure is exactly and deterministically known. There are many metrics available for computing the similarity of two nodes. According to the characteristics of these metrics, they can be divided into neighbor-based metrics, path-based metrics, random-walk-based metrics and social theory-based metrics. Furthermore, there are some learning-based methods that have been proposed in recent years.
+\subsection{Neighbor-based Algorithms}
+
+Among all approaches, neighbors-based metrics are the simplest yet effective to predict missing links. These metrics assume that two nodes are more likely to be connected if they have more common neighbors. Researchers design a lot of neighbor-based metrics for link prediction. Their definitions are as follows:
+
+%\section{Neighbor-based Metrics for Link Prediction}
+%\subsection{For certain networks}
+\textbf{Common Neighbors (CN)}: Common Neighbors (CN) \cite{newman2001clustering} is the simplest metric among all neighbor-based metrics. It simply counts the number of common neighbors between two nodes and ignores their total number of neighbors. Two nodes, $\mathcal{V}_x$ and $\mathcal{V}_y$, are more likely to form a link if they have many common neighbors. Let $\Gamma(x)$ denote the set of neighbors of node $\mathcal{V}_x$. This measure is defined as follows:
+\begin{equation}
+s_{xy}=|\Gamma(x)\cap\Gamma(y)|
+\end{equation}
+CN ignores that different common neighbors have different contributions on the connection likelihood. To solve this problem, other variants are proposed, where a common neighbor with low degree is advocated for by assigning more weight to it. 
+
+\textbf{Resource Allocation (RA)}: Resource Allocation (RA) \cite{zhou2009predicting} metric is regarded as one of the best neighbor-based metrics because of its performance. Considering a pair of nodes, $\mathcal{V}_x$ and $\mathcal{V}_y$, which are not directly connected. The node $\mathcal{V}_x$ can send some resource to $\mathcal{V}_y$, with their common neighbors playing the role of transmitters. In the simplest case, we assume that each transmitter has a unit of resource, and will evenly distribute to all its neighbors. As a results the amount of resource $\mathcal{V}_y$ received is defined as the similarity
+between $\mathcal{V}_x$ and $\mathcal{V}_y$, which is:
+\begin{equation}
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{1}{k(z)}
+\end{equation}
+where $k(z)$ is the degree of node $\mathcal{V}_z$, namely $k(z) = |\Gamma(z)|$
+
+\textbf{Adamic-Adar Coefficient (AA)}: The AA metric was proposed by Adamic and Adar for computing similarity between two web pages firstly at \cite{adamic2003friends}, subsequent to which it has been widely used in social networks. Similarly to CN, common neighbors which have fewer neighbors are also weighted more heavily. It is defined as:
+\begin{equation}
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{1}{\log{k(z)}}
+\end{equation}
+\subsection{Random-walk-based Algorithms}
+
+\subsection{Learning-based Algorithms}
+
+\end{document}

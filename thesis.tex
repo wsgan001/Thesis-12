@@ -15,7 +15,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Package dependencies  %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[utf8]{inputenc}
+% all the modification I have made
+%\usepackage[utf8]{inputenc} % comment it and no bug for German letters.
+\usepackage[linesnumbered, ruled]{algorithm2e} % add it to make the algorithm part works
+
+
+% until here
 \usepackage{subfiles}
 \usepackage[titletoc]{appendix}
 \usepackage{amssymb,amsmath}
@@ -88,8 +93,8 @@
 \renewcommand{\contentsname}{Table of Contents}
 
 % Fill in the following
-\title{Thesis Title} % Title can't use formulae, symbols, superscripts, subscripts, greek letters, etc. all of which should be replaced with word substitutes
-\author{Author Name}
+\title{Graphs Mining with Edge Uncertainty} % Title can't use formulae, symbols, superscripts, subscripts, greek letters, etc. all of which should be replaced with word substitutes
+\author{Chi Zhang}
 
 \degree{\MSc}
 %\degree{\PhD} % uncomment respective degree
@@ -103,7 +108,7 @@
 %\field{Specialization Field}
 
 % Put the year that you submitted your thesis below
-\submissionyear{\number2017}
+\submissionyear{\number2018}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Document Content  %
@@ -190,6 +195,7 @@
 % See FGSR requirements for any additional requirements on the body
 
 \subfile{\main/tex/introduction.tex}
+\subfile{\main/tex/previous.tex}
 \subfile{\main/tex/conclusion.tex}
 
 % Renaming the bibliography: See http://tex.stackexchange.com/questions/12597/renaming-the-bibliography-page-using-bibtex
