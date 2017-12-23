@@ -38,14 +38,14 @@ s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{1}{k(z)}
 \end{equation}
 where $k(z)$ is the degree of node $\mathcal{V}_z$, namely $k(z) = |\Gamma(z)|$
 
-\textbf{Adamic-Adar Coefficient (AA)}: The AA metric was proposed by Adamic and Adar for computing similarity between two web pages firstly at \cite{adamic2003friends}, subsequent to which it has been widely used in social networks. Similarly to CN, common neighbors which have fewer neighbors are also weighted more heavily. It is defined as:
+\textbf{Adamic-Adar Coefficient (AA)}: (copy) The AA metric was proposed by Adamic and Adar for computing similarity between two web pages firstly at \cite{adamic2003friends}, subsequent to which it has been widely used in social networks. Similarly to CN, common neighbors which have fewer neighbors are also weighted more heavily. It is defined as:
 \begin{equation}
 s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{1}{\log{k(z)}}
 \end{equation}
 
-Since CN is not normalized, some neighbor-based metrics consider how to normalize the CN metric reasonably.
+(copy) Since CN is not normalized, some neighbor-based metrics consider how to normalize the CN metric reasonably.
 
-\textbf{Jaccard Coefficient (JC)}: Jaccard coefficient normalizes the size of common neighbors. It assumes higher values for pairs of nodes which share a higher proportion of common neighbors relative to total number of neighbors they have. This measure is defined as:
+\textbf{Jaccard Coefficient (JC)}: (copy) Jaccard coefficient normalizes the size of common neighbors. It assumes higher values for pairs of nodes which share a higher proportion of common neighbors relative to total number of neighbors they have. This measure is defined as:
 \begin{equation}
 s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{|\Gamma(x)\cup\Gamma(y)|}
 \end{equation}
@@ -60,6 +60,15 @@ s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{|\Gamma(x)|+|\Gamma(y)|}
 \textbf{Salton Cosine Similarity (SC)} \cite{salton1986introduction}
 \begin{equation}
 s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{\sqrt[]{|\Gamma(x)|\cdot|\Gamma(y)|}}
+\end{equation}
+\subsection{Path-based Algorithms}
+(copy) Besides node and neighbor’s information, paths between two nodes can also be used for computing similarities of node pairs, and we call such methods path-based metrics.
+
+\textbf{Katz} \cite{katz1953new}
+
+\textbf{Local Path (LP)}: (Copy before "If", add/edit by myself after that) LP metric \cite{lu2009similarity} makes use of information of local paths with length 2 and length 3. Unlike the metrics that only use the information of the nearest neighbors, it exploits some additional information of the neighbors within length 3 distances to current node. Obviously, paths of length 2 are more relevant than paths of length 3, so there is an adjustment factor $\alpha$ applied in the measure. $\alpha$ should be a small number close to 0. (If $\alpha=0$, LP is the same as CN.) The metric is defined as \ref{LPEquation}. Here, $A^2$ and $A^3$ denote the number of all paths with length 2 and 3 connecting $x$ and $y$ respectively.
+\begin{equation}\label{LPEquation}
+s_{xy}=A^2 + \alpha A^3
 \end{equation}
 
 \subsection{Random-walk-based Algorithms}
