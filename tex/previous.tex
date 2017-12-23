@@ -43,14 +43,14 @@ where $k(z)$ is the degree of node $\mathcal{V}_z$, namely $k(z) = |\Gamma(z)|$
 s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{1}{\log{k(z)}}
 \end{equation}
 
-(copy) Since CN is not normalized, some neighbor-based metrics consider how to normalize the CN metric reasonably.
+(copy) Since CN is not normalized, some neighbor-based metrics also consider how to normalize the CN metric reasonably.
 
-\textbf{Jaccard Coefficient (JC)}: (copy) Jaccard coefficient normalizes the size of common neighbors. It assumes higher values for pairs of nodes which share a higher proportion of common neighbors relative to total number of neighbors they have. This measure is defined as:
+\textbf{Jaccard Coefficient (JC)}: (copy) Jaccard coefficient \cite{jaccard1901etude} normalizes the size of common neighbors. It assumes higher values for pairs of nodes which share a higher proportion of common neighbors relative to total number of neighbors they have. This measure is defined as:
 \begin{equation}
 s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{|\Gamma(x)\cup\Gamma(y)|}
 \end{equation}
 
-Other similar metrics includes:
+Other similar normalized metrics include:
 
 \textbf{S{\o}rensen Index (SI)} \cite{sorensen1948method}
 \begin{equation}
@@ -61,18 +61,34 @@ s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{|\Gamma(x)|+|\Gamma(y)|}
 \begin{equation}
 s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{\sqrt[]{|\Gamma(x)|\cdot|\Gamma(y)|}}
 \end{equation}
-\subsection{Path-based Algorithms}
-(copy) Besides node and neighbor’s information, paths between two nodes can also be used for computing similarities of node pairs, and we call such methods path-based metrics.
 
-\textbf{Katz} \cite{katz1953new}
+Other neighbor-based metrics include Hub Promoted Index (HPI) \cite{ravasz2002hierarchical}, Hub Depressed Index (HDI) \cite{zhou2009predicting}, Leicht-Holme-Newman Index (LHNI) \cite{leicht2006vertex} and Preferential Attachment (PA) \cite{barabasi2002evolution}.
+\subsection{Path-based Metrics}
+(Copy from review paper.) Besides node and neighbor’s information, paths between two nodes can also be used for computing similarities of node pairs, and we call such methods path-based metrics.
 
-\textbf{Local Path (LP)}: (Copy before "If", add/edit by myself after that) LP metric \cite{lu2009similarity} makes use of information of local paths with length 2 and length 3. Unlike the metrics that only use the information of the nearest neighbors, it exploits some additional information of the neighbors within length 3 distances to current node. Obviously, paths of length 2 are more relevant than paths of length 3, so there is an adjustment factor $\alpha$ applied in the measure. $\alpha$ should be a small number close to 0. (If $\alpha=0$, LP is the same as CN.) The metric is defined as \ref{LPEquation}. Here, $A^2$ and $A^3$ denote the number of all paths with length 2 and 3 connecting $x$ and $y$ respectively.
+\textbf{Katz Index (KI)}: (From LP paper, it's OK.) Katz Index \cite{katz1953new} is based on the ensemble of all paths, which directly sums over the collection of paths and exponentially damped by length to give the short paths more weights. It is defined as:
+\begin{equation}
+s_{xy} = \sum_{l=1}^{\infty}\beta \cdot |\text{path}_{x,y}^{l}|
+\end{equation}
+where $\text{path}_{x,y}^{l}$ is the set of all paths with length $l$ connecting nodes $\mathcal{V}_x$ and $\mathcal{V}_y$, and $\beta$ is a free parameter controlling the weights of the paths. Obviously, a very small $\beta$ yields a measure close to CN because the long paths contribute very little.
+
+\textbf{Local Path (LP)}: (Modified, it's OK.) Unlike Katz Index that considers paths with all possible length. To provide a good trade-off of accuracy and complexity, LP metric \cite{lu2009similarity} only makes use of information of local paths with length 2 and length 3. Obviously, paths of length 2 are more relevant than paths of length 3, so there is an adjustment factor $\alpha$ applied in the measure. $\alpha$ should be a small number close to 0. (If $\alpha=0$, LP is the same as CN.) The metric is defined as \ref{LPEquation}. Here, $A^2$ and $A^3$ denote the number of all paths with length 2 and 3 connecting nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ respectively.
 \begin{equation}\label{LPEquation}
 s_{xy}=A^2 + \alpha A^3
 \end{equation}
 
-\subsection{Random-walk-based Algorithms}
+\subsection{Random-walk-based Metrics}
+(Copy from review paper, add one sentence "the while ...") Social interactions between nodes in social networks can also be modeled by random walk, which uses transition probabilities from a node to its neighbors to denote the destination of a random walker from current node. The whole process is a Markov chain describing the sequence of nodes visited by a random walker. There exists some link prediction metrics which calculate similarities between nodes based on random walk.
 
+\textbf{Hitting Time (HT)}
+
+\textbf{Local-random-walk-based Index (LRWI)}: Local-random-walk-based Index is based on local random walk, which has lower computational complexity compared with other random-walk-based similarity metrics. It is defined as:
+\begin{equation}
+s_{xy}=\frac{k(x)}{2|E|}\cdot \pi_{xy}(t) + \frac{k(y)}{2|E|}\cdot \pi_{yx}(t) 
+\end{equation}
+Here, $|E|$ is the number of links in the network. $k(x)$ is the degree of the node $\mathcal{V}_x$. $\pi_{xy}(t)$ is the probability that a random walker starts from node $\mathcal{V}_x$ and locates at node $\mathcal{V}_y$ after $t$ steps. $t$ is a tunable hyper-parameter. When $t=2$, this metric is the same as RA.
+
+\textbf{Superposed-random-walk-based Index}
 \subsection{Learning-based Algorithms}
 
 \end{document}
