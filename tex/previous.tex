@@ -78,9 +78,18 @@ s_{xy}=A^2 + \alpha A^3
 \end{equation}
 
 \subsection{Random-walk-based Metrics}
-(Copy from review paper, add one sentence "the while ...") Social interactions between nodes in social networks can also be modeled by random walk, which uses transition probabilities from a node to its neighbors to denote the destination of a random walker from current node. The whole process is a Markov chain describing the sequence of nodes visited by a random walker. There exists some link prediction metrics which calculate similarities between nodes based on random walk.
+(Copy from review paper, add one sentence "the whole ...") Social interactions between nodes in social networks can also be modeled by random walk, which uses transition probabilities from a node to its neighbors to denote the destination of a random walker from current node. The whole process is a Markov chain describing the sequence of nodes visited by a random walker. There exists some link prediction metrics which calculate similarities between nodes based on random walk.
 
-\textbf{Hitting Time (HT)}
+\textbf{Hitting Time (HT)} \cite{gobel1974random} $HT(x, y)$ is the expected number of steps required for a random walk from node $\mathcal{V}_x$ to node $\mathcal{V}_y$. It is defined as follows:
+\begin{equation}
+HT(x,y) = 1 + \sum_{w\in \Gamma(x)}P_{x,w}HT(w,y) 
+\end{equation}
+Where $P_{x,w}$ is the probability of stepping on node $\mathcal{V}_w$ from node $\mathcal{V}_x$.
+
+\textbf{Commute Time (CT)}: Since the hitting time metric is not symmetric, commute time is used to count the expected steps both from $\mathcal{V}_x$ to $\mathcal{V}_y$ and from $\mathcal{V}_y$ to $\mathcal{V}_x$. It can be obtained as follows:
+\begin{equation}
+CT(x,y) = HT(x,y) + HT(y,x)
+\end{equation}
 
 \textbf{Local-random-walk-based Index (LRWI)}: Local-random-walk-based Index is based on local random walk, which has lower computational complexity compared with other random-walk-based similarity metrics. It is defined as:
 \begin{equation}
@@ -88,7 +97,13 @@ s_{xy}=\frac{k(x)}{2|E|}\cdot \pi_{xy}(t) + \frac{k(y)}{2|E|}\cdot \pi_{yx}(t)
 \end{equation}
 Here, $|E|$ is the number of links in the network. $k(x)$ is the degree of the node $\mathcal{V}_x$. $\pi_{xy}(t)$ is the probability that a random walker starts from node $\mathcal{V}_x$ and locates at node $\mathcal{V}_y$ after $t$ steps. $t$ is a tunable hyper-parameter. When $t=2$, this metric is the same as RA.
 
-\textbf{Superposed-random-walk-based Index}
+%\textbf{Superposed-random-walk-based Index}
 \subsection{Learning-based Algorithms}
+\textbf{Local-Naive-Bayes-based Index (LNB)}: Zhen \cite{liu2011link} proposed a probabilistic model called local naive Bayes (LNB) based on the Bayes theory. Different to traditional methods in which each common neighbor contributes equally to the link likelihood, LNB considers that different common neighbors may play different roles in link prediction. The characteristic of the model is that two node pairs with same number of common neighbors could have different connection likelihoods. It is defined as:
+\begin{equation}
+s_{xy} = \sum_{w\in \Gamma(x)\cap\Gamma(y)}f(k(w))\log(sR_w)
+\end{equation}
+Here, $s=\frac{M}{M^T}-1$ ($M=\frac{|\mathcal{V}|(|\mathcal{V}|-1)}{2}$, $M^T=|\mathcal{E}|$), $R_w=\frac{N_{\triangle w}+1}{N_{\wedge w}+1}$ ($N_{\triangle w}$ and $N_{\wedge w}$ are respectively the number of connected and disconnected node pairs whose common neighbors include node $\mathcal{V}_w$). There are three forms of function $f$, namely $f(k(w))=1$, $f(k(w))=\frac{1}{\log k(w)}$ and $f(k(w))=\frac{1}{k(w)}$, which are corresponding to the Local Naive Bayes (LNB) form of CN, AA and RA metrics respectively.
+
 
 \end{document}
