@@ -105,7 +105,31 @@ s_{xy} = \sum_{w\in \Gamma(x)\cap\Gamma(y)}f(k(w))\log(sR_w)
 \end{equation}
 Here, $s=\frac{M}{M^T}-1$ ($M=\frac{|\mathcal{V}|(|\mathcal{V}|-1)}{2}$, $M^T=|\mathcal{E}|$), $R_w=\frac{N_{\triangle w}+1}{N_{\wedge w}+1}$ ($N_{\triangle w}$ and $N_{\wedge w}$ are respectively the number of connected and disconnected node pairs whose common neighbors include node $\mathcal{V}_w$). There are three forms of function $f$, namely $f(k(w))=1$, $f(k(w))=\frac{1}{\log k(w)}$ and $f(k(w))=\frac{1}{k(w)}$, which are corresponding to the Local Naive Bayes (LNB) form of CN, AA and RA metrics respectively.
 
+\subsection{Link Prediction Algorithms for Weighted Graphs}
+The above-mentioned similarity metrics only consider the binary relations among nodes; however, in the real world, links are naturally weighted, which may represent the amount of traffic load along connections in a transportation network or the number of co-authorized papers in a co-authorship network. Murata and Moriyasu \cite{murata2007link} proposed weighted similarity metrics as variants of Common Neighbors, Resource Allocation and Adamic-Adar. The definition of weighted metrics can also be checked in \cite{lu2010link}:
+
+%\subsection{For weighted networks}
+\textbf{Weighted Common Neighbors (WCN)}:
+\begin{equation}
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}w(x,z)+w(y,z)
+\end{equation}
+
+\textbf{Weighted Resource Allocation (WRA)}:
+\begin{equation}
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{w(x,z)+w(y,z)}{s(z)}
+\end{equation}
+
+\textbf{Weighted Adamic-Adar (WAA)}:
+\begin{equation}
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{w(x,z)+w(y,z)}{\log(1+s(z))}
+\end{equation}
+
+Here, $w(x, y) = w(y, x)$ denotes the weight of the link between nodes $\mathcal{V}_x$ and $\mathcal{V}_y$, and $s(x)=\sum_{z\in\Gamma(x)}w(x,z)$ is the strength of node $\mathcal{V}_x$.
+
 \subsection{Link Prediction Algorithms for Uncertain Graphs}
+Mallek \cite{mallek2016evidential} proposed to use belief function theory to deal with uncertain social networks. Belief function network is considered as a generalization of the probability theory, and one of its uses is the representation and management of missing information. It provides tools for combining of evidence induced from several pieces of information. The approach proposed by Mallek combines sampling techniques and information fusion and returns good results in real-life settings. It used popular structural measures based on local graph information to compute distances between the links, and a fusion procedure was subsequently applied taking into account the reliability of the sources to predict missing links.
+
+Ahmed \cite{ahmed2016efficient} investigated the problem of link prediction in dynamic uncertain networks, he designed a new method based on a random walk in temporal uncertain networks. His method first transformed the link prediction problem in uncertain networks to a random walk in a deterministic network. Then, the similarity scores between a node and its neighbors were calculated within a sub-graph around this node to reduce the computational time. He also extended the method for solving link prediction in temporal uncertain networks. The proposed method integrated time and global topological information and obtained accurate results.
 
 \section{Community Detection}
 Community detection algorithms for global community detection.
