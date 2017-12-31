@@ -194,9 +194,25 @@ There are also algorithms that work with a different strategy, which is not base
 \subsection{Community Detection Algorithms for Uncertain Graphs}
 
 \section{Centrality and Rank}
-A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure.
+A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
 \subsection{Degree Centrality}
+(Review 1 and review 2) Degree centrality is one of the simplest and centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
+\begin{equation}
+c^{deg}(i) = \frac{deg(i)}{n-1}
+\end{equation}
+The degree centrality is a measure of the size of $\mathcal{V}_i$'s immediate network. It gives some insight into the popularity of the node $\mathcal{V}_i$, but misses potentially important aspects of the architecture of the network and a node’s position in the network.
 \subsection{Closeness Centrality}
+(Wiki, networkx, review 1, 2, Passed) Closeness centrality \cite{freeman1978centrality} is based on the network distance between a node and each other reachable node. It can be regarded as a measure of how long it will take to spread information from a start node to all other nodes sequentially. A path from $\mathcal{V}_i$ to $\mathcal{V}_j$ is called a shortest path if it minimizes the number of steps in the sequence, and the distance from $\mathcal{V}_i$ to $\mathcal{V}_j$, denoted $d(i,j)$, is the number of steps in such a shortest path from $\mathcal{V}_i$ to $\mathcal{V}_j$. In a connected graph, the closeness centrality of $\mathcal{V}_i$ is defined as the reciprocal of the average shortest path distance to $\mathcal{V}_i$ over all $n-1$ reachable nodes.
+\begin{equation}
+c^{clo}(i) = \frac{n-1}{\sum_{i\neq j}d(i,j)}
+\end{equation}
+When a graph is not strongly connected, Wasserman and Faust \cite{wasserman1994social} proposed an improved formula, which is a ratio of the fraction of nodes in the network which are reachable, to the average distance from the reachable nodes. It is defined as:
+\begin{equation}
+c^{clo}(i) = \frac{n-1}{N-1}\frac{n-1}{\sum_{i\neq j}d(i,j)}
+\end{equation}
+Where $N$ is the total number of nodes in the network.
+
+
 \subsection{Betweenness Centrality}
 \subsection{Eigenvector Centrality}
 \subsection{PageRank Centrality}
