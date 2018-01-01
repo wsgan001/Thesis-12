@@ -196,11 +196,11 @@ There are also algorithms that work with a different strategy, which is not base
 \section{Centrality and Rank}
 A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
 \subsection{Degree Centrality}
-(Review 1 and review 2) Degree centrality is one of the simplest and centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
+(Review 1 and review 2) Degree centrality is one of the simplest centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
 \begin{equation}
 c^{deg}(i) = \frac{deg(i)}{n-1}
 \end{equation}
-The degree centrality is a measure of the size of $\mathcal{V}_i$'s immediate network. It gives some insight into the popularity of the node $\mathcal{V}_i$, but misses potentially important aspects of the architecture of the network and a node’s position in the network.
+The degree centrality is a measure of the size of $\mathcal{V}_i$'s immediate network. It gives some insight into the popularity of the node $\mathcal{V}_i$, but misses potentially important aspects of the whole architecture of the network and a node’s position in the network.
 \subsection{Closeness Centrality}
 (Wiki, networkx, review 1, 2, Passed) Closeness centrality \cite{freeman1978centrality} is based on the network distance between a node and each other reachable node. It can be regarded as a measure of how long it will take to spread information from a start node to all other nodes sequentially. A path from $\mathcal{V}_i$ to $\mathcal{V}_j$ is called a shortest path if it minimizes the number of steps in the sequence, and the distance from $\mathcal{V}_i$ to $\mathcal{V}_j$, denoted $d(i,j)$, is the number of steps in such a shortest path from $\mathcal{V}_i$ to $\mathcal{V}_j$. In a connected graph, the closeness centrality of $\mathcal{V}_i$ is defined as the reciprocal of the average shortest path distance to $\mathcal{V}_i$ over all $n-1$ reachable nodes.
 \begin{equation}
@@ -213,14 +213,26 @@ c^{clo}(i) = \frac{n-1}{N-1}\frac{n-1}{\sum_{i\neq j}d(i,j)}
 where $N$ is the total number of nodes in the network.
 
 \subsection{Betweenness Centrality}
-Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes. It was introduced as a measure for quantifying the control of a human on the communication between other humans in a social network by Linton Freeman \cite{freeman1977set}. Nodes that have a high probability to occur on a randomly chosen shortest path between two randomly chosen nodes have a high betweenness. The betweenness centrality can be represented as:
+(Wiki and review 2) Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes. It was introduced as a measure for quantifying the control of a human on the communication between other humans in a social network by Linton Freeman \cite{freeman1977set}. It captures the role of a node as an intermediary in the transmission of information or resources between other nodes in the network. Nodes that have a high probability to occur on a randomly chosen shortest path between two randomly chosen nodes have a high betweenness. The betweenness centrality can be represented as:
 \begin{equation}
 c^{bet}(i) = \sum_{s\neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}
 \end{equation}
 where $\sigma_{st}$ is the total number of shortest paths from node $\mathcal{V}_s$ to node $\mathcal{V}_t$ and $\sigma_{st}(v)$ is the number of those paths that pass through $\mathcal{V}_v$.
+
 (What about disconnected network?)
 \subsection{Eigenvector Centrality}
-\subsection{PageRank Centrality}
+(Wiki, changed a little bit, add one line from networkx, latter part of pagerank from wiki) Eigenvector centrality \cite{bonacich1987power} is a measure of the influence of a node in a network. It computes the centrality for a node based on the centrality of its neighbors. It assumes that connections to high-scoring nodes contribute more to the score of the node in question than equal connections to low-scoring nodes. The relative centrality score of node $\mathcal{V}_i$ can be defined as:
+\begin{equation}
+c^{eig}(i) = \frac{1}{\lambda}\sum_{\mathcal{V}_j\in \Gamma(i)}c^{eig}(j)
+\end{equation}
+where $\Gamma(i)$ is a set of the neighbors of $\mathcal{V}_i$ and $\lambda$ is a constant. It can also be rewritten in vector notation as the eigenvector equation:
+\begin{equation}
+AC^{eig}=\lambda C^{eig}
+\end{equation}
+where $C^{eig} = (c^{eig}(1),c^{eig}(2),...,c^{eig}(n))$; $A=(a_{i,j})$ is the adjacency matrix, i.e. $a_{i,j}=1$ if node $\mathcal{V}_i$ is linked to node $\mathcal{V}_j$, and $a_{i,j}=0$ otherwise.
+
+The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the first algorithm that was used by the company, and it is the best-known.
+
 \subsection{Centrality Measures in Uncertain Graphs}
 
 \end{document}
