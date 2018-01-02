@@ -192,6 +192,11 @@ Wu \cite{wu2012local} proposed a three-phase algorithm. In the agglomeration pha
 There are also algorithms that work with a different strategy, which is not based on greedy community expansion. One of these is PageRank-Nibble \cite{andersen2006local}, which works by locally approximating PageRank-vectors. It is a two-step algorithm: first, it approximates personalized PageRank vectors around the seed node and sorts all nodes with a positive score according to that score in decreasing order. Then it considers all communities that are a prefix of this sorted list and returns the prefix with minimum conductance as community.
 
 \subsection{Community Detection Algorithms for Uncertain Graphs}
+To deal with uncertain networks, one simple idea is thresholding: we assume that edges exist whenever their probability exceeds a certain threshold that we choose. Krogan et al. \cite{krogan2006global} first converted the uncertain network into a conventional binary network based on this idea, then applied traditional community detection algorithms to the conventional binary network. While this technique can certainly reveal useful information, it has some drawbacks. First, there is the issue of the choice of the threshold level. Krogan et al. used a value of 0.273 for their threshold, but there is little doubt that their results would be different if they had chosen a different value, and we have the question what threshold should we choose if we have a totally different uncertain network. Second, thresholding throws away potentially useful information. There is a substantial difference between an edge with probability 0.3 and an edge with probability 0.9, but the distinction is lost if one applies a threshold at 0.273.
+
+Dahlin \cite{dahlin2011method} proposed a method which is based on sampling. The method mainly has three steps. Firstly, he samples candidate networks from the ensemble of certain networks that are consistent with the available information about the uncertain networks using Monte Carlo methods. Then, standard community detection methods can be applied to candidate networks. Lastly, he merges candidate communities into the most probable community structure of the uncertain network. This method also has its shortcomings. To get reliable communities, one needs to sample enough candidate networks, which will result in high computation complexity.
+
+To solve the first problem, Krogan [1] converted the uncertain network into a conventional binary network by thresholding the likelihoods. Johan [19] proposed a method which is based on sampling from an ensemble of certain networks that are consistent with the available information about the uncertain networks. Lin [20] developed a novel k-means algorithm to solve the uncertain clustering problem. Travis [21] gave a principled maximum-likelihood method for inferring community structure. 
 
 \section{Centrality and Rank}
 A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
@@ -234,5 +239,13 @@ where $C^{eig} = (c^{eig}(1),c^{eig}(2),...,c^{eig}(n))$; $A=(a_{i,j})$ is the a
 The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the first algorithm that was used by the company, and it is the best-known.
 
 \subsection{Centrality Measures in Uncertain Graphs}
+In order to model the effect of relationship uncertainty on network connectivity, Sevon et al. \cite{sevon2006link} developed a method for biological databases. They proposed to transform the probabilities into weights by taking the negative logarithm of the probabilities:
+\begin{equation}
+w(e) = -\log(p(e))
+\end{equation}
+Then standard algorithms for finding shortest paths can be applied. Closeness centrality and betweenness centrality can also be calculated based on shortest paths.
+
+Pfeiffer and Neville \cite{pfeiffer2010probabilistic} formulated a measure of centrality based on the most probable paths of communication, rather than shortest paths. They developed a notion of probabilistic paths in uncertain networks, and used it as a foundation for computing probabilistic betweenness centrality in networks evolving over time. The motivation behind this approach is as follows: Conventional betweenness centrality uses shortest paths as an indication of how quickly information can potentially flow in the network. When adopting a probabilistic view of the network, information flowing across paths with fewer nodes is less important than whether the information is successfully transmitted. In this case, central nodes should correspond to nodes that have high probability of transferring information throughout the graph, regardless of path length.
+
 
 \end{document}
