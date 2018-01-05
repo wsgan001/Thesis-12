@@ -8,6 +8,8 @@
 
 \chapter{Centrality and Rank}
 \section{Inversed Probabilistic Graph}
+To rank entities in uncertain networks.
+
 A major shortcoming of both NL and ML methods is that they can only be applied to unweighted probabilistic graphs. For weighted probabilistic graph, the original weights of the graph could cause the two methods to perform badly, which we will show later in the experiment section. In order to solve this problem, we propose a new approach, Inversed Probabilistic Graph, defined as follow:\\
 Given a probabilistic graph $\mathcal{G} = (V, E, P, W )$, where $V$ is the collection of vertices, $E$ the collection of edges, $P$ is the probability distribution over the edges and $W$ is the collection of original weights over the edges. For an arbitrary edge $e \in E$, we divide the original weight by the corresponding edge probability to a power of $\lambda$,
 \begin{equation}
