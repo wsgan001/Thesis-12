@@ -4,6 +4,7 @@
 \providecommand{\main}{..}
 \documentclass[\main/thesis.tex]{subfiles}
 \externaldocument{previous}
+\externaldocument{link}
 
 \onlyinsubfile{\externaldocument{\main/tex/introduction}}
 
@@ -100,7 +101,7 @@ $\mathcal{K}_{i=7}$ is smaller than $\mathcal{K}_{i=1,2,3,4,5}$, so we will firs
 
 %During expansion stepThese kinds of noises may  %The probability over links between nodes in uncertain certain networks are obtained by 
 \subsection{Full Algorithm Description} \label{Full-Algorithm-Description-local}
-Similar to Clauset and Chen's greedy algorithm mentioned in Section \ref{Local-Community-Detection-Algorithms-Review}, our algorithm also firstly place the start node in the community. At each step, we sort candidate nodes based on their $\mathcal{K}$ (first a few steps) or $\mathcal{UR}$ values (other steps). After all candidate nodes are sorted, the algorithm will add the first node which can increase the community's $\mathcal{UR}$ to the community $\mathcal{C}$. This process will stop when there are no remaining nodes in $\mathcal{S}$ which can increase the community's $\mathcal{UR}$. It is worth noting that candidate nodes are sorted based on $\mathcal{K}$ value in the first a few steps. However, the number of steps is not yet decided. It is a tunable hyper-parameter, and we use $\lambda$ to represent it. (We will demonstrate how to find the optimal $\lambda$ in Section \ref{Hyper-Parameter-Evaluation-Local}.) The full algorithm description can be found in Algorithm 1.
+Similar to Clauset and Chen's greedy algorithm mentioned in Section \ref{Local-Community-Detection-Algorithms-Review}, our algorithm also firstly place the start node in the community. At each step, we sort candidate nodes based on their $\mathcal{K}$ (first a few steps) or $\mathcal{UR}$ values (other steps). After all candidate nodes are sorted, the algorithm will add the first node which can increase the community's $\mathcal{UR}$ to the community $\mathcal{C}$. This process will stop when there are no remaining nodes in $\mathcal{S}$ which can increase the community's $\mathcal{UR}$. It is worth noting that candidate nodes are sorted based on $\mathcal{K}$ value in the first a few steps. However, the number of steps is not yet decided. It is a tunable hyper-parameter, and we use $\lambda$ to represent it. (We will demonstrate how to find the optimal $\lambda$ in Section \ref{Hyper-Parameter-Evaluation-Local}.) The full algorithm description can be found in Algorithm \ref{Local-Community-Identification-with-Edge-Uncertainty}.
 % The full algorithm includes the \textbf{Discovery Phase} and the \textbf{Examination Phase}. In the discovery phase, one can sort candidate nodes based on their $\mathcal{K}$ (first a few steps) or $\mathcal{UR}$ values at other steps. After all candidate nodes are sorted, the algorithm will add the first node which can increase the community's $\mathcal{UR}$ to the community $\mathcal{C}$. This process will stop when there are no remaining nodes in $\mathcal{S}$ which can increase the community's $\mathcal{UR}$. In the examination phase, nodes in $\mathcal{C}$ which have more neighbors outside $\mathcal{C}$ than inside will be removed except the start node. Here, $N_i^{in}$ denotes the expected number of edges between node $n_i$ and other nodes within the community, while $N_i^{out}$ denotes the expected number of edges between node $n_i$ and nodes which do not belong to the community. Besides, it is worth noting that candidate nodes are sorted based on $\mathcal{K}$ value in the first a few steps in the discovery phase. However, the number of steps is not yet decided. It is a tunable hyper-parameter, and we use $\lambda$ to represent it. (We will demonstrate how to find the optimal $\lambda$ in Section 3.3.) The full algorithm description can be found in Algorithm 1.
 %using $\mathcal{K}$ at first 3 steps and $\mathcal{UR}$ at future steps to evaluate the relationship between candidate node and the existing community,
 
@@ -148,6 +149,7 @@ Similar to Clauset and Chen's greedy algorithm mentioned in Section \ref{Local-C
 %     }
    \Return{$\mathcal{D}$}
   \caption{Local Community Identification with Edge Uncertainty}
+  \label{Local-Community-Identification-with-Edge-Uncertainty}
    \end{algorithm}
 
 % \begin{algorithm}
@@ -222,33 +224,7 @@ $c_{max}$  & 25    & maximum for the community sizes \\ \hline
 \end{tabular}
 \end{table}
 \subsection*{Generating Uncertain Networks}
-Since there are not many publicly available uncertain network datasets on the web, we proposed a way to generate uncertain networks based on certain networks. It is mainly based on three assumptions: (1) Edges that exist in certain networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in certain networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generate the uncertain network by the Algorithm 2.
-
-\begin{algorithm}
-  \KwData{A certain network $G$, non-existential edge percentage $p$}
-  \KwResult{An uncertain network $\mathcal{G}$.}
-  \For{each edge $e \in G.edges$}{
-        Generate probability $P$ according to a Gaussian distribution with mean 0.8 and variance 1. (If not in the range (0,1], regenerate it.)\;
-%         \While{probability $P$ not in the range (0,1]}{
-%         	Regenerate probability $P$ according to a Gaussian distribution\;
-%         }
-        Assign probability $P$ to edge $e$\;
-        Add edge $e$ to the uncertain network $\mathcal{G}$\;
-    }
-$NonExistentialEdgesCount\leftarrow|G.edges|\times p$\;
-\While{$NonExistentialEdgesCount>0$}{
-    Generate edge $e$ which is not in $\mathcal{G}.edges$\;
-    Generate probability $P$ according to a Gaussian distribution with mean 0.2 and variance 1. (If not in the range (0,1], regenerate it.)\;
-%         \While{probability $P$ not in the range (0,1]}{
-%         	Regenerate probability $P$ according to a Gaussian distribution\;
-%         }
-    Assign probability $P$ to edge $e$\;
-    Add edge $e$ to the uncertain network $\mathcal{G}$\;
-    $NonExistentialEdgesCount \leftarrow NonExistentialEdgesCount-1$\;
-}
-\Return{uncertain network $\mathcal{G}$}
-\caption{Uncertain Network Generator}
-\end{algorithm}
+Since there are not many publicly available uncertain network datasets on the web, we use Algorithm \ref{Uncertain-Network-Generator} as mentioned in Section \ref{Synthetic-Uncertain-Network-Based-on-Deterministic-Network} to generate uncertain networks based on the former 3 certain networks. 
 
 In experiments, the percentage of non-existential edges we choose to add range from 10\% to 40\%. Besides, we also evaluate our algorithm on original certain networks, which can be regarded as a special case of uncertain networks.
 
@@ -266,7 +242,7 @@ All uncertain networks are randomly generated based on deterministic network. To
 Algorithm                                                                      & Description                                                                                                                                                                \\ \hline
 R                                                                     & \begin{tabular}[c]{@{}c@{}}original local community detection algorithm \\ based on the local modularity R\end{tabular}                                                    \\ \hline
 UR                                                                    & \begin{tabular}[c]{@{}c@{}}original local community detection algorithm \\ based on the uncertain version local \\ modularity UR as mentioned in  Equation \ref{UR-Local}\end{tabular} \\ \hline
-UR+K                                                                  & \begin{tabular}[c]{@{}c@{}}our algorithm as mentioned in Algorithm1\end{tabular}                                            \\ \hline
+UR+K                                                                  & \begin{tabular}[c]{@{}c@{}}our algorithm as mentioned in Algorithm \ref{Local-Community-Identification-with-Edge-Uncertainty}\end{tabular}                                            \\ \hline
 Louvain                                                                        & Louvain algorithm                                                                                                                                                          \\ \hline
 ULouvain                                                                       & \begin{tabular}[c]{@{}c@{}}regard probability as weight and\\  run weighted version of Louvain algorithm\end{tabular}                                                           \\ \hline
 \end{tabular}

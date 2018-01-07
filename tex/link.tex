@@ -13,7 +13,7 @@
 
 \chapter{Link Prediction}
 \section{Link Prediction for Uncertain Graphs}
-\subsection{Uncertain Version of Neighbor-based Metrics}
+\subsection{Uncertain Version of Neighbor-based Metrics} \label{Uncertain-Version-of-Neighbor-based-Metrics}
 To solve the problem of link prediction for uncertain graphs, one very naive/intuitive way is to regard the probability as a weight and apply weighted similarity metrics. However, there exists some problems. Figure \ref{problem-consider-probability-as-weight-link} is an example.
 
 Nodes $\mathcal{V}_A$ and $\mathcal{V}_B$ are more likely to be connected than nodes $\mathcal{V}_D$ and $\mathcal{V}_E$ based on Equation \ref{WCN-previous}.
@@ -137,7 +137,7 @@ P_{1\rightarrow m}^n=\sum_{i=max(0,n-\lceil m/2 \rceil)}^{min(n,\lfloor m/2 \rfl
 \label{divide-conquer-specific}
 \end{equation}
 
-It can be implemented recursively. The result probability list has the length of $m+1$ and $P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^m$ are saved sequentially in the result probability list. The full algorithm description can be found in Algorithm 1.
+It can be implemented recursively. The result probability list has the length of $m+1$ and $P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^m$ are saved sequentially in the result probability list. The full algorithm description can be found in Algorithm \ref{kEdgeProbability}.
 
 % \newcommand\tikzmark[1]{%
 %   \tikz[remember picture,overlay]\node (#1) {};}
@@ -200,25 +200,26 @@ return $kEdge(0, uncertainEdgeListLength-1)$\;
  }
 }
 \caption{kEdgeProbability}
+\label{kEdgeProbability}
 \end{algorithm}
 
-Based on the description of Algorithm 1, we can find that $T(m)=2\times T(\frac{1}{2}m)+(1+2+...+m)$, so the time complexity of Algorithm 1 is $O(m^2)$. After calculating the probability list, we can easily calculate node $\mathcal{V}_z$'s contribution for $s_{xy}$.%To calculate $s_{xy}$, we can perform Algorithm 1 for each common neighbor of node $\mathcal{V}_x$ and $\mathcal{V}_y$, so the time complexity of computing $s_{xy}$ is $O(m^2t)$. The full algorithm to calculate $s_{xy}$ can be found in Algorithm 2.\\
+Based on the description of Algorithm \ref{kEdgeProbability}, we can find that $T(m)=2\times T(\frac{1}{2}m)+(1+2+...+m)$, so the time complexity of Algorithm \ref{kEdgeProbability} is $O(m^2)$. After calculating the probability list, we can easily calculate node $\mathcal{V}_z$'s contribution for $s_{xy}$.%To calculate $s_{xy}$, we can perform Algorithm 1 for each common neighbor of node $\mathcal{V}_x$ and $\mathcal{V}_y$, so the time complexity of computing $s_{xy}$ is $O(m^2t)$. The full algorithm to calculate $s_{xy}$ can be found in Algorithm 2.\\
 
 It is reasonable to calculate $\mathcal{V}_z$'s contribution for $s_{xy}$ in $O(m^2)$. However, because the node $\mathcal{V}_z$ has $(m+2)$ neighbors in total, then any two of these neighbors (except those that are already connected, assume $u$ of them are already connected) will regard the node $\mathcal{V}_z$ as a common neighbor when calculating their similarity measures. Then node $\mathcal{V}_z$ will be calculated $(\frac{(m+2)(m+1)}{2}-u)$ times. 
 
 %Each time we consider node $\mathcal{V}_z$, as mentioned in Algorithm 2, we pick out edges which are not connecting to the pair of nodes we are considering.\\
 
 %of the pair of unconnected nodes we are considering
-For each pair of unconnected nodes which have common neighbor $\mathcal{V}_z$, when we calculate node $\mathcal{V}_z$'s contribution on the similarity measure value, we firstly pick out edges which do not connect to the pair of nodes we are considering, then we apply Algorithm 1 to the list of these edges to get the probability list. For different pairs of unconnected nodes, the list of edges differ. To calculate $\mathcal{V}_z$'s contribution for one pair of nodes, the time complexity is $O(m^2)$. We have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, so the total time complexity will be $O(m^4)$.
+For each pair of unconnected nodes which have common neighbor $\mathcal{V}_z$, when we calculate node $\mathcal{V}_z$'s contribution on the similarity measure value, we firstly pick out edges which do not connect to the pair of nodes we are considering, then we apply Algorithm \ref{kEdgeProbability} to the list of these edges to get the probability list. For different pairs of unconnected nodes, the list of edges differ. To calculate $\mathcal{V}_z$'s contribution for one pair of nodes, the time complexity is $O(m^2)$. We have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, so the total time complexity will be $O(m^4)$.
 
-This kind of time complexity is still very large. We can use the similar idea as we mentioned in Algorithm 1 to reduce the time complexity. In Algorithm 1, we use the probability lists of the left half sublist and the right half list to compute the probability list of the full list. Actually, Equation \ref{divide-conquer-specific} has a more general form, which can be represented as follow:
+This kind of time complexity is still very large. We can use the similar idea as we mentioned in Algorithm \ref{kEdgeProbability} to reduce the time complexity. In Algorithm \ref{kEdgeProbability}, we use the probability lists of the left half sublist and the right half list to compute the probability list of the full list. Actually, Equation \ref{divide-conquer-specific} has a more general form, which can be represented as follow:
 \begin{equation}
 P_{1\rightarrow m}^n=\sum_{i=max(0,n+k-m)}^{min(n,k)}P_{1\rightarrow k}^i P_{k+1\rightarrow m}^{n-i}
 \label{divide-conquer-general}
 \end{equation}
 In Equation \ref{divide-conquer-specific}, we choose $k=\lfloor m/2 \rfloor$.
 
-When we consider different pairs of unconnected nodes, node $\mathcal{V}_z$'s total edges remain the same, what differs is the set of two edges which connects to the pair of nodes we are considering, and it results in the difference of the remaining edges list which will be used in Algorithm 1. To reduce the time complexity, the idea is to calculate the full edges list's corresponding probability list, which can be represented as $A = [P_{1\rightarrow m+2}^0, P_{1\rightarrow m+2}^1, ..., P_{1\rightarrow m+2}^{m+2}]$. For each pair of unconnected nodes, we want to calculate the remaining edges list's corresponding probability list, which can be represented as $B = [P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$. We can firstly find the two edges connecting to the pair of unconnected nodes, and calculate these two edges' corresponding probability list, which can be represented as $C = [P_{m+1\rightarrow m+2}^0, P_{m+1\rightarrow m+2}^1, P_{m+1\rightarrow m+2}^2]$. Then we can use $A$ and $C$ to calculate $B$ based on the Equation \ref{divide-conquer-general}. The full equations can be represented as follows:
+When we consider different pairs of unconnected nodes, node $\mathcal{V}_z$'s total edges remain the same, what differs is the set of two edges which connects to the pair of nodes we are considering, and it results in the difference of the remaining edges list which will be used in Algorithm \ref{kEdgeProbability}. To reduce the time complexity, the idea is to calculate the full edges list's corresponding probability list, which can be represented as $A = [P_{1\rightarrow m+2}^0, P_{1\rightarrow m+2}^1, ..., P_{1\rightarrow m+2}^{m+2}]$. For each pair of unconnected nodes, we want to calculate the remaining edges list's corresponding probability list, which can be represented as $B = [P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$. We can firstly find the two edges connecting to the pair of unconnected nodes, and calculate these two edges' corresponding probability list, which can be represented as $C = [P_{m+1\rightarrow m+2}^0, P_{m+1\rightarrow m+2}^1, P_{m+1\rightarrow m+2}^2]$. Then we can use $A$ and $C$ to calculate $B$ based on the Equation \ref{divide-conquer-general}. The full equations can be represented as follows:
 
 \begin{align*}
 \left\{
@@ -234,7 +235,7 @@ P_{m+1\rightarrow m+2}^0 P_{1\rightarrow m}^{2} + P_{m+1\rightarrow m+2}^1 P_{1\
 \right.
 \end{align*}
 
-These equations are easy to solve, after we get $A$ and $C$, we can calculate probability list $[P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$ in $O(m)$. Though it takes $O(m^2)$ time to calculate $A$, when we consider different pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, $A$ only needs to be calculated once. To calculate different pairs of unconnected nodes' corresponding probability list $B$, we can firstly calculate their probability $C$ in constant time, and then use $A$ and $C$ to calculate $B$ in $O(m)$. Because we have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes, the time complexity of calculating $A$ can be ignored. To calculate node $\mathcal{V}_z$'s contribution for all unconnected nodes which have common neighbor $\mathcal{V}_z$, the time complexity is $O(m^3)$, and the average time complexity of calculating node $\mathcal{V}_z$'s contribution for a certain pair of unconnected nodes will be $O(m)$. To calculate $s_{xy}$, we can calculate nodes $\mathcal{V}_x$ and $\mathcal{V}_y$'s each common neighbor's contribution for $s_{xy}$ in $O(m)$, because nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ have $t$ common neighbors in total. The time complexity of computing $s_{xy}$ is $O(mt)$. The overall algorithm for calculating $s_{xy}$ can be found in Algorithm 3. Before running Algorithm 3, we need to do the initialization step, which is described in Algorithm 2. In Algorithm 2, we iterate through all nodes in graph $\mathcal{G}$, calculate their probability lists $A$ and save them in a hash table. The hash table will be used in Algorithm 3.
+These equations are easy to solve, after we get $A$ and $C$, we can calculate probability list $[P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$ in $O(m)$. Though it takes $O(m^2)$ time to calculate $A$, when we consider different pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, $A$ only needs to be calculated once. To calculate different pairs of unconnected nodes' corresponding probability list $B$, we can firstly calculate their probability $C$ in constant time, and then use $A$ and $C$ to calculate $B$ in $O(m)$. Because we have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes, the time complexity of calculating $A$ can be ignored. To calculate node $\mathcal{V}_z$'s contribution for all unconnected nodes which have common neighbor $\mathcal{V}_z$, the time complexity is $O(m^3)$, and the average time complexity of calculating node $\mathcal{V}_z$'s contribution for a certain pair of unconnected nodes will be $O(m)$. To calculate $s_{xy}$, we can calculate nodes $\mathcal{V}_x$ and $\mathcal{V}_y$'s each common neighbor's contribution for $s_{xy}$ in $O(m)$, because nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ have $t$ common neighbors in total. The time complexity of computing $s_{xy}$ is $O(mt)$. The overall algorithm for calculating $s_{xy}$ can be found in Algorithm \ref{Resource-Allocation-Value-Calculation}. Before running Algorithm \ref{Resource-Allocation-Value-Calculation}, we need to do the initialization step, which is described in Algorithm \ref{Initialization}. In Algorithm \ref{Initialization}, we iterate through all nodes in graph $\mathcal{G}$, calculate their probability lists $A$ and save them in a hash table. The hash table will be used in Algorithm \ref{Resource-Allocation-Value-Calculation}.
 
 \begin{algorithm}
 \KwData{An uncertain graph $\mathcal{G}$.}
@@ -246,10 +247,11 @@ $dict[\mathcal{V}_z]\leftarrow kEdgeProbability(uncertainEdgeList)$\;
 }
 return $dict$\;
 \caption{Initialization}
+\label{Initialization}
 \end{algorithm}
 
 \begin{algorithm}
-\KwData{Nodes $\mathcal{V}_x$, $\mathcal{V}_y$, an uncertain graph $\mathcal{G}$ and the hash table $dict$ after running Algorithm 2}
+\KwData{Nodes $\mathcal{V}_x$, $\mathcal{V}_y$, an uncertain graph $\mathcal{G}$ and the hash table $dict$ after running Algorithm \ref{Initialization}}
 \KwResult{Resource Allocation value for nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in $\mathcal{G}$}
 $result \leftarrow 0$\;
 \For{each node $\mathcal{V}_z \in \Gamma(x)\cap\Gamma(y)$}{
@@ -272,6 +274,7 @@ $probValue \leftarrow 1$\;
 }
 return $result$\;
 \caption{Resource Allocation Value Calculation}
+\label{Resource-Allocation-Value-Calculation}
 \end{algorithm}
 
 \section{Experiments}
@@ -282,30 +285,33 @@ We used the protein-protein interaction network (PPI) created by Krogan \cite{kr
 \subsection*{Enron Network}
 We used the Enron dataset compiled by Shetty and Adibi \cite{shetty2004enron}. The dataset is a subset of Enron employees, comprised of emails sent between employees, resulting in a dataset with 50,572 emails among 151 employees. We used the same method as Section 5 in  \cite{pfeiffer2010probabilistic} to assign each edge with a possibility of occurrence. 
 
-\subsection*{Synthetic Uncertain Network Based on Deterministic Network}
-Since there are not many publicly available uncertain network datasets on the web, we also generated an uncertain network based on deterministic network. The dataset we used here is USAir. The US air transportation network contains 332 airports and 2126 airlines. Based on this network, we generated its corresponding uncertain network. The way we generated uncertain networks is mainly based on three assumptions: (1) Edges that exist in certain networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in certain networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generated the uncertain network by Algorithm 4.
+\subsection*{Synthetic Uncertain Network Based on Deterministic Network} \label{Synthetic-Uncertain-Network-Based-on-Deterministic-Network}
+Since there are not many publicly available uncertain network datasets on the web, we also generated an uncertain network based on deterministic network. The dataset we used here is USAir. The US air transportation network contains 332 airports and 2126 airlines. Based on this network, we generated its corresponding uncertain network. The way we generated uncertain networks is mainly based on three assumptions: (1) Edges that exist in certain networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in certain networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generated the uncertain network by Algorithm \ref{Uncertain-Network-Generator}.
 \begin{algorithm}
   \KwData{A certain network $G$, non-existential edge percentage $p$}
-  \KwResult{An uncertain network $G$.}
+  \KwResult{An uncertain network $\mathcal{G}$.}
   \For{each edge $e \in G.edges$}{
         Generate probability $P$ according to a Gaussian distribution with mean 0.8 and variance 1. (If not in the range (0,1], regenerate it.)\;
 %         \While{probability $P$ not in the range (0,1]}{
 %         	Regenerate probability $P$ according to a Gaussian distribution\;
 %         }
         Assign probability $P$ to edge $e$\;
+        Add edge $e$ to the uncertain network $\mathcal{G}$\;
     }
 $NonExistentialEdgesCount\leftarrow|G.edges|\times p$\;
 \While{$NonExistentialEdgesCount>0$}{
-    Generate edge $e$ which is not in $G.edges$\;
+    Generate edge $e$ which is not in $\mathcal{G}.edges$\;
     Generate probability $P$ according to a Gaussian distribution with mean 0.2 and variance 1. (If not in the range (0,1], regenerate it.)\;
 %         \While{probability $P$ not in the range (0,1]}{
 %         	Regenerate probability $P$ according to a Gaussian distribution\;
 %         }
     Assign probability $P$ to edge $e$\;
+    Add edge $e$ to the uncertain network $\mathcal{G}$\;
     $NonExistentialEdgesCount \leftarrow NonExistentialEdgesCount-1$\;
 }
-\Return{uncertain network $G$}
+\Return{uncertain network $\mathcal{G}$}
 \caption{Uncertain Network Generator}
+\label{Uncertain-Network-Generator}
 \end{algorithm}
 \subsection{Experiments}
 To test the prediction performance of an algorithm, the observed edges, $E$, are divided into two separate sets: training set $E^T$, is regarded as known information; and probe set $E^P$, is used for testing and no information therein is allowed to be used for prediction. Clearly, we have $E^T \cup E^P = E$ and $E^T \cap E^P = $\o. 

@@ -4,6 +4,7 @@
 \providecommand{\main}{..}
 \documentclass[\main/thesis.tex]{subfiles}
 \externaldocument{previous}
+\externaldocument{link}
 
 \begin{document}
 
@@ -113,7 +114,7 @@ Figure \ref{cl_enron} is the same experiment as Figure \ref{btw_enron} except th
 \end{figure}
 
 \subsubsection{Unweighted Graphs} \label{Unweighted-Graphs-Experiment}
-We also implement experiment on synthetic unweighted graphs. We generate three communities with the number of nodes in each community being 30, 50, and 120, respectively. The probability of \textit{within-community} connection is 0.2, and the probability of \textit{between-community} connection is 0.02. Then we use uncertain network generator to generate an uncertain network based on the given certain network.
+We also implement experiment on synthetic unweighted graphs. We generate three communities with the number of nodes in each community being 30, 50, and 120, respectively. The probability of \textit{within-community} connection is 0.2, and the probability of \textit{between-community} connection is 0.02. Then we use uncertain network generator (Algorithm \ref{Uncertain-Network-Generator} as mentioned in Section \ref{Synthetic-Uncertain-Network-Based-on-Deterministic-Network}) to generate an uncertain network based on the given certain network. 
 
 The betweenness centrality results of three methods are displayed in Figure \ref{btw_unweighted} and the closeness results are in Figure \ref{cl_unweighted}. For all three methods, the linear correlation in closeness experiment are stronger than that in betweenness experiment. But no matter in which case, our IPG always exhibits the best performance among the three and NL has the worst performance.
 
