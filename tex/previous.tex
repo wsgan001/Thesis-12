@@ -20,7 +20,7 @@ Among all approaches, neighbor-based metrics are the simplest yet effective to p
 %\subsection{For certain networks}
 \textbf{Common Neighbors (CN)}: Common Neighbors (CN) \cite{newman2001clustering} is the simplest metric among all neighbor-based metrics. It simply counts the number of common neighbors between two nodes and ignores their total number of neighbors. Two nodes, $\mathcal{V}_x$ and $\mathcal{V}_y$, are more likely to form a link if they have many common neighbors. Let $\Gamma(x)$ denote the set of neighbors of node $\mathcal{V}_x$. This measure is defined as follows:
 \begin{equation}
-s_{xy}=|\Gamma(x)\cap\Gamma(y)|
+s_{xy}=|\Gamma(x)\cap\Gamma(y)| \label{CN-previous}
 \end{equation}
 
 CN ignores that different common neighbors have different contributions on the connection likelihood. To solve this problem, other variants such as Resource Allocation and Adamic-Adar metrics are proposed, where a common neighbor with low degree is advocated for by assigning more weight to it. 
@@ -105,7 +105,7 @@ The above-mentioned similarity metrics only consider the binary relations among 
 %\subsection{For weighted networks}
 \textbf{Weighted Common Neighbors (WCN)}:
 \begin{equation}
-s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}w(x,z)+w(y,z)
+s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}w(x,z)+w(y,z) \label{WCN-previous}
 \end{equation}
 
 \textbf{Weighted Resource Allocation (WRA)}:
