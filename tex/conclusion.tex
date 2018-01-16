@@ -5,6 +5,7 @@
 \documentclass[\main/thesis.tex]{subfiles}
 \externaldocument{previous}
 \externaldocument{link}
+\externaldocument{introduction}
 
 \begin{document}
 
@@ -23,6 +24,13 @@ In the evaluation part, we use supervised, unsupervised and illustrative experim
 
 % In this Chapter, we provide a novel approach to deal with edge uncertainty in graph mining problems. Specifically, by taking the inverse of edge probability with a hyper-parameter, we can use existing existing centrality measures to rank entities. We empirically show the effectiveness of our IPG method by experiments. %First, by visualizing the centrality rankings in a dynamic network, we demonstrate IPG's ability to capture salient events underlying the evolution of network. Next, we compare the linear correlation of three method, Negative Logarithm, Most Probable Path, and Inversed Probabilistic Graphs, with sampling. Across a various of datasets and tasks, IPG has a steadily strong linear correlation with sampling compared to the other two. Finally, we compare the performance of the three methods in the previous example on a real dataset with ground truth. We assess the three methods by ROC curves, and results show that IPG still has advantages over NL and ML. 
 
+\newpage
+
 \section{Future Work}
+As mentioned in Section \ref{challenges}, there are at least four types of uncertain networks. In this thesis, we only research on networks with edge uncertainty. For future study, we may can consider to solve complex network analysis problems in the context of other types of uncertainty.
+
+Another interesting topic is about graph representation. Recently, there has been a surge of approaches that seek to learn representations that encode structural information about the graph. The idea behind these representation learning approaches is to learn a mapping that embeds nodes, or entire (sub)graphs, as points in a low-dimensional vector space. The goal is to optimize this mapping so that geometric relationships in this learned space reflect the structure of the original graph. After optimizing the embedding space, the learned embeddings can be used as feature inputs for downstream machine learning tasks, such as node classification and link prediction. Many recent successful methods belong to random walk approaches, such as DeepWalk \cite{perozzi2014deepwalk}, LINE \cite{tang2015line} and node2vec \cite{grover2016node2vec}. The task of graph representation has attracted a lot of attention recently, however, the same problem is that they all focused on certain networks. Graph representation with edge uncertainty is also an important task but not yet solved. Therefore, this may be a direction we can further explore.
+
+%In this thesis, we solve link prediction, local community detection and entity ranking problems in the context of uncertain networks. 
 
 \end{document}
