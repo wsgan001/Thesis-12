@@ -10,8 +10,8 @@
 \SetKwProg{Fn}{Function}{}{} % add this line to solve the problem existing in algorithm
 
 \begin{document}
-
 \chapter{Link Prediction}
+As we discussed in Section \ref{neighbor-based-metrics}, common-neighbors-based metrics are the simplest yet effective to predict missing links. They assume that two nodes are more likely to be connected if they have more common neighbors. Common neighbors (CN) is one of the most widespread measurements used in link prediction problem mainly due to its simplicity \cite{newman2001clustering}. Resource Allocation (RA) metric \cite{zhou2009predicting} is regarded as one of the best neighbor-based metrics because of its performance. Therefore, in this Chapter, we concentrate on CN and RA index.
 \section{Link Prediction for Uncertain Graphs}
 \subsection{Uncertain Version of Neighbor-based Metrics} \label{Uncertain-Version-of-Neighbor-based-Metrics}
 To solve the problem of link prediction for uncertain graphs, one very naive/intuitive way is to regard the probability as a weight and apply weighted similarity metrics. However, there exists some problems. Figure \ref{problem-consider-probability-as-weight-link} is an example.
@@ -69,7 +69,7 @@ s_{xy}=\sum_{G\in \mathcal{G}}( Pr(G)\times\sum_{z\in \Gamma_G(x)\cap\Gamma_G(y)
 
 Here, $\Gamma_G(x)$ denotes the set of neighbors of node $\mathcal{V}_x$ in the possible world $G$, $k_G(x)$ is the degree of node $\mathcal{V}_x$ in the possible world $G$.
 
-\subsection{Time Complexity Analysis for the Calculation of Common Neighbors in Uncertain Networks} \label{CN-Complexity-Analysis}
+\subsection{UCN Complexity Analysis} \label{CN-Complexity-Analysis}
 We have a total of $2^{|\mathcal{E}|}$ possible worlds, and we can calculate CN value for each possible world in $O(k)$, where $k$ is nodes' average degree in the possible world. Therefore, the time complexity of calculating Common Neighbors value based on Equation \ref{UCN-link} is $O(2^{|\mathcal{E}|}k)$.
 
 Assume $\Gamma_{xy} = \Gamma(x)\cap\Gamma(y)$ is the common neighbors set of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in uncertain graph $\mathcal{G}$. Whether a node $\mathcal{V}_z \in \Gamma_{xy}$ is a common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in a possible world is independent of other nodes because it is determined by the existence of edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ in the possible world. Therefore, each node in $\Gamma_{xy}$ can be considered independently. If the existence probability over uncertain edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ are $\mathcal{P}_{x,z}$ and $\mathcal{P}_{y,z}$ respectively, only in $\mathcal{P}_{x,z}\times\mathcal{P}_{y,z}$ of all possible worlds, node $\mathcal{V}_z$ is the common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$. Therefore, Equation \ref{UCN-link} can also be represented as:
@@ -84,7 +84,7 @@ When $z\in \Gamma_G(x)\cap\Gamma_G(y)$, $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}
 
 By doing so, the time complexity for calculating $s_{xy}$ can be reduced to $O(K)$, where $K$ is nodes' average degree in the uncertain network.
 %For each common neighbors in possible worlds, they are also common neighbors of two nodes in uncertain graphs. Therefore, each nodes of common neighbors in uncertain graph can be considered independently.
-\subsection{Time Complexity Analysis for the Calculation of Resource Allocation in Uncertain Networks}
+\subsection{URA Complexity Analysis}
 We have a total of $2^{|\mathcal{E}|}$ possible worlds, and nodes' average degree in the possible world is $k$, then we can calculate RA value for each possible world in $O(k)$, so the time complexity of calculating Resource Allocation value based on Equation \ref{URA-link} is $O(2^{|\mathcal{E}|}k)$.
 %(To calculate the RA value between node $x$ and node $y$, we only need consider edges connecting node $x$ and node $y$'s common neighbors. Assume the average degree of each node is $n$, then the number of edges connecting common neighbors is $mn$, so the time complexity can be reduced to $O(2^{mn}m)$.) \\
 
@@ -96,7 +96,7 @@ s_{xy}&=\sum_{G\in \mathcal{G}}( Pr(G)\times\sum_{z\in \Gamma_G(x)\cap\Gamma_G(y
 \end{align*}
 $\mathcal{G}_z$ here stands for the uncertain sub-graph formed by edges connecting to node $\mathcal{V}_z$, and $G_z$ is the possible world based on the uncertain sub-graph $\mathcal{G}_z$.
 
-\subsection{Efficient Algorithm for the Calculation of Resource Allocation}
+\subsection{An efficient Algorithm for URA}
 
 Only when both edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ exist, node $\mathcal{V}_z$ is the common neighbor of node $\mathcal{V}_x$ and node $\mathcal{V}_y$ in the possible world $G$, which means $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)=1$. When node $\mathcal{V}_z$ is not the common neighbor of node $\mathcal{V}_x$ and node $\mathcal{V}_y$, $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)=0$, it means those possible worlds will not have an impact on the value of $s_{xy}$. Edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ belong to the edge set which connects to node $\mathcal{V}_z$, so for those possible worlds which have an impact on the value of $s_{xy}$, node $\mathcal{V}_z$ at least has two edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$.
 

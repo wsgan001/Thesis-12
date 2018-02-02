@@ -8,9 +8,8 @@
 
 \chapter{Uncertain Network Generator} \label{generator-chapter}
 
-Since there are not many publicly available uncertain network datasets, to conduct experiments in following chapters, we put forward a way to generate uncertain networks based on deterministic networks. The way we generate uncertain networks is mainly based on three assumptions: (1) Edges that exist in deterministic networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in deterministic networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generated the uncertain network by Algorithm \ref{Uncertain-Network-Generator}.
+Since there are not many publicly available uncertain network datasets, to conduct experiments in following chapters, we put forward a way to generate uncertain networks based on deterministic networks. The way we generate uncertain networks is mainly based on three assumptions: (1) Edges that exist in deterministic networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in deterministic networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generated the uncertain network by Algorithm \ref{Uncertain-Network-Generator}. It is worth noting that the percentage of non-existential edges is adjustable, and we choose different values in different experiments in later chapters.
 
-NEED MORE INTRODUCTION. SUCH AS NOISE PERCENTAGE.
 \begin{algorithm}
   \KwData{A deterministic network $G$, non-existential edge percentage $p$}
   \KwResult{An uncertain network $\mathcal{G}$.}
