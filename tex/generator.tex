@@ -1,0 +1,41 @@
+% A workaround to allow relative paths in included subfiles
+% that are to be compiled separately
+% See https://tex.stackexchange.com/questions/153312/subfiles-inside-a-subfile-using-relative-paths
+\providecommand{\main}{..}
+\documentclass[\main/thesis.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Uncertain Network Generator} \label{generator-chapter}
+
+Since there are not many publicly available uncertain network datasets, to conduct experiments in following chapters, we put forward a way to generate uncertain networks based on deterministic networks. The way we generate uncertain networks is mainly based on three assumptions: (1) Edges that exist in deterministic networks tend to have high probability in corresponding uncertain networks; (2) In uncertain networks, except existential edges, there should exist some edges which do not exist in deterministic networks, and they tend to have low probability; (3) Based on a power law distribution, nodes with high degree are more likely to have new added edges. Based on these three assumptions, we generated the uncertain network by Algorithm \ref{Uncertain-Network-Generator}.
+
+NEED MORE INTRODUCTION. SUCH AS NOISE PERCENTAGE.
+\begin{algorithm}
+  \KwData{A deterministic network $G$, non-existential edge percentage $p$}
+  \KwResult{An uncertain network $\mathcal{G}$.}
+  \For{each edge $e \in G.edges$}{
+        Generate probability $P$ according to a Gaussian distribution with mean 0.8 and variance 1. (If not in the range (0,1], regenerate it.)\;
+%         \While{probability $P$ not in the range (0,1]}{
+%         	Regenerate probability $P$ according to a Gaussian distribution\;
+%         }
+        Assign probability $P$ to edge $e$\;
+        Add edge $e$ to the uncertain network $\mathcal{G}$\;
+    }
+$NonExistentialEdgesCount\leftarrow|G.edges|\times p$\;
+\While{$NonExistentialEdgesCount>0$}{
+    Generate edge $e$ which is not in $\mathcal{G}.edges$\;
+    Generate probability $P$ according to a Gaussian distribution with mean 0.2 and variance 1. (If not in the range (0,1], regenerate it.)\;
+%         \While{probability $P$ not in the range (0,1]}{
+%         	Regenerate probability $P$ according to a Gaussian distribution\;
+%         }
+    Assign probability $P$ to edge $e$\;
+    Add edge $e$ to the uncertain network $\mathcal{G}$\;
+    $NonExistentialEdgesCount \leftarrow NonExistentialEdgesCount-1$\;
+}
+\Return{uncertain network $\mathcal{G}$}
+\caption{Uncertain Network Generator}
+\label{Uncertain-Network-Generator}
+\end{algorithm}
+
+\end{document}

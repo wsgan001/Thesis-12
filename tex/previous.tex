@@ -7,17 +7,69 @@
 \begin{document}
 
 \chapter{A Review of Complex Network Analysis}
-In this Chapter, we review some of the related work relevant to this thesis. This thesis is mainly about the problems of link prediction, local community detection and entity ranking in uncertain networks. In certain networks, these problems have been fully studied, so we first review the existing algorithms in certain scenarios. There are also algorithms about complex network analysis in uncertain scenarios, we also summarize them briefly.
+In this Chapter, we review some of the related work relevant to this thesis. This thesis is mainly about the problems of entity ranking, link prediction and local community detection in uncertain networks. In deterministic networks, these problems have been fully studied, so we first review the existing algorithms in certain scenarios. There are also algorithms about complex network analysis in uncertain scenarios, we also summarize them briefly.
+
+\section{Centrality and Rank}
+A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
+\subsection{Degree Centrality}
+Degree centrality is one of the simplest centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
+\begin{equation}
+c^{deg}(i) = \frac{deg(i)}{n-1}
+\end{equation}
+The degree centrality is a measure of the size of $\mathcal{V}_i$'s immediate network. It gives some insight into the popularity of the node $\mathcal{V}_i$, but misses potentially important aspects of the whole architecture of the network and a node’s position in the network.
+\subsection{Closeness Centrality}
+Closeness centrality \cite{freeman1978centrality} is based on the network distance between a node and each other reachable node. It can be regarded as a measure of how long it will take to spread information from a start node to all other nodes sequentially. A path from $\mathcal{V}_i$ to $\mathcal{V}_j$ is called a shortest path if it minimizes the number of steps in the sequence, and the distance from $\mathcal{V}_i$ to $\mathcal{V}_j$, denoted $d(i,j)$, is the number of steps in such a shortest path from $\mathcal{V}_i$ to $\mathcal{V}_j$. In a connected graph, the closeness centrality of $\mathcal{V}_i$ is defined as the reciprocal of the average shortest path distance to $\mathcal{V}_i$ over all $n-1$ reachable nodes.
+\begin{equation}
+c^{clo}(i) = \frac{n-1}{\sum_{i\neq j}d(i,j)}
+\end{equation}
+When a graph is not strongly connected, Wasserman and Faust \cite{wasserman1994social} proposed an improved formula, which is a ratio of the fraction of nodes in the network which are reachable, to the average distance from the reachable nodes. It is defined as:
+\begin{equation}
+c^{clo}(i) = \frac{n-1}{N-1}\frac{n-1}{\sum_{i\neq j}d(i,j)}
+\end{equation}
+where $N$ is the total number of nodes in the network.
+
+\subsection{Betweenness Centrality}
+Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes. It was introduced as a measure for quantifying the control of a human on the communication between other humans in a social network by Linton Freeman \cite{freeman1977set}. It captures the role of a node as an intermediary in the transmission of information or resources between other nodes in the network. Nodes that have a high probability to occur on a randomly chosen shortest path between two randomly chosen nodes have a high betweenness. The betweenness centrality can be represented as:
+\begin{equation}
+c^{bet}(i) = \sum_{s\neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}
+\end{equation}
+where $\sigma_{st}$ is the total number of shortest paths from node $\mathcal{V}_s$ to node $\mathcal{V}_t$ and $\sigma_{st}(v)$ is the number of those paths that pass through $\mathcal{V}_v$.
+
+%(What about disconnected network?)
+\subsection{Eigenvector Centrality}
+Eigenvector centrality \cite{bonacich1987power} is a measure of the influence of a node in a network. It computes the centrality for a node based on the centrality of its neighbors. It assumes that connections to high-scoring nodes contribute more to the score of the node in question than equal connections to low-scoring nodes. The relative centrality score of node $\mathcal{V}_i$ can be defined as:
+\begin{equation}
+c^{eig}(i) = \frac{1}{\lambda}\sum_{\mathcal{V}_j\in \Gamma(i)}c^{eig}(j)
+\end{equation}
+where $\Gamma(i)$ is a set of the neighbors of $\mathcal{V}_i$ and $\lambda$ is a constant. It can also be rewritten in vector notation as the eigenvector equation:
+\begin{equation}
+AC^{eig}=\lambda C^{eig}
+\end{equation}
+where $C^{eig} = (c^{eig}(1),c^{eig}(2),...,c^{eig}(n))$; $A=(a_{i,j})$ is the adjacency matrix, i.e. $a_{i,j}=1$ if node $\mathcal{V}_i$ is linked to node $\mathcal{V}_j$, and $a_{i,j}=0$ otherwise.
+
+The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the first algorithm that was used by the company, and it is the best-known.
+
+\subsection{Centrality Measures in Uncertain Graphs} \label{CMIUG} 
+In order to model the effect of relationship uncertainty on network connectivity, Sevon et al. \cite{sevon2006link} developed a method for biological databases. They proposed to transform the probabilities into weights by taking the negative logarithm of the probabilities:
+\begin{equation}
+w(e) = -\log(p(e))
+\end{equation}
+Then standard algorithms for finding shortest paths can be applied. Closeness centrality and betweenness centrality can also be calculated based on shortest paths.
+
+Pfeiffer and Neville \cite{pfeiffer2010probabilistic} formulated a measure of centrality based on the most probable paths of communication, rather than shortest paths. They developed a notion of probabilistic paths in uncertain networks, and used it as a foundation for computing probabilistic betweenness centrality in networks evolving over time. The motivation behind this approach is as follows: Conventional betweenness centrality uses shortest paths as an indication of how quickly information can potentially flow in the network. When adopting a probabilistic view of the network, information flowing across paths with fewer nodes is less important than whether the information is successfully transmitted. In this case, central nodes should correspond to nodes that have high probability of transferring information throughout the graph, regardless of path length.
+
+\newpage
+
 \section{Link Prediction}\label{previous:link-prediction}
 %Link prediction is the problem of determining future or missing associations between entities in complex networks based on observed links. Because of its broad applications in different domains, link prediction has attracted increasing attention from computer scientists, biologists and physicists recently. Link prediction can be categorized into two classes: one is forecasting the future links, which can be used to help on-line social network users find new friends; the other is determining the hidden or unobserved relationships between nodes, such as protein-protein interaction networks and food webs. The discovery of interaction links in biological networks is usually expensive, therefore, finding the most promising latent links instead of checking all possible links is important in reducing experimental costs.
 
-In the past decade, many works have been done about link prediction in certain graphs, graphs where the network structure is exactly and deterministically known. There are many metrics available for computing the similarity of two nodes. According to the characteristics of these metrics, they can be divided into neighbor-based metrics, path-based metrics, random-walk-based metrics and social theory-based metrics. Furthermore, there are some learning-based methods that have been proposed in recent years.
+In the past decade, many works have been done about link prediction in deterministic graphs, graphs where the network structure is exactly and deterministically known. There are many metrics available for computing the similarity of two nodes. According to the characteristics of these metrics, they can be divided into neighbor-based metrics, path-based metrics, random-walk-based metrics and social theory-based metrics. Furthermore, there are some learning-based methods that have been proposed in recent years.
 \subsection{Neighbor-based Metrics}
 
 Among all approaches, neighbor-based metrics are the simplest yet effective to predict missing links. These metrics assume that two nodes are more likely to be connected if they have more common neighbors. Researchers design a lot of neighbor-based metrics for link prediction. Their definitions are as follows:
 
 %\section{Neighbor-based Metrics for Link Prediction}
-%\subsection{For certain networks}
+%\subsection{For deterministic networks}
 \textbf{Common Neighbors (CN)}: Common Neighbors (CN) \cite{newman2001clustering} is the simplest metric among all neighbor-based metrics. It simply counts the number of common neighbors between two nodes and ignores their total number of neighbors. Two nodes, $\mathcal{V}_x$ and $\mathcal{V}_y$, are more likely to form a link if they have many common neighbors. Let $\Gamma(x)$ denote the set of neighbors of node $\mathcal{V}_x$. This measure is defined as follows:
 \begin{equation}
 s_{xy}=|\Gamma(x)\cap\Gamma(y)| \label{CN-previous}
@@ -128,7 +180,7 @@ Ahmed \cite{ahmed2016efficient} investigated the problem of link prediction in d
 \newpage
 
 \section{Community Detection}
-In the past 15 years, a large number of community detection detection algorithms have been proposed for certain graphs. According to the characteristics of these algorithms, they can be divided into graph partitioning-based algorithms \cite{kernighan1970efficient,newman2013community}, clustering-based algorithms \cite{girvan2002community,newman2004fast,blondel2008fast,clauset2004finding}, genetic algorithms-based algorithms \cite{pizzuti2008ga} and label propagation-based algorithms \cite{raghavan2007near}. In this part, we mainly review graph partitioning-based algorithms and clustering-based algorithms, besides, we also review some local community detection algorithms.
+In the past 15 years, a large number of community detection detection algorithms have been proposed for deterministic graphs. According to the characteristics of these algorithms, they can be divided into graph partitioning-based algorithms \cite{kernighan1970efficient,newman2013community}, clustering-based algorithms \cite{girvan2002community,newman2004fast,blondel2008fast,clauset2004finding}, genetic algorithms-based algorithms \cite{pizzuti2008ga} and label propagation-based algorithms \cite{raghavan2007near}. In this part, we mainly review graph partitioning-based algorithms and clustering-based algorithms, besides, we also review some local community detection algorithms.
 
 \subsection{Graph Partitioning-based Algorithms}
 Graph partitioning is the process of partitioning a graph into a predefined number of smaller components with specific properties. A common property to be minimized is called cut size. A cut is a partition of the vertex set of a graph into two disjoint subsets, and the size of the cut is the number of edges between the components. A multicut is a set of edges whose removal divides the graph into two or more components. It is necessary to specify the number of components one wishes to get in case of graph partitioning. There is a long tradition of research by computer scientists on graph partitioning, and a wide variety of heuristic algorithms have been developed that give acceptable good solutions in many cases.
@@ -164,7 +216,7 @@ Clauset \cite{clauset2005finding} and Chen \cite{chen2009detecting} proposed the
 \end{equation}
 where $\mathcal{B}_{in\_edge}$ is the number of edges that connect boundary nodes and other nodes in $\mathcal{D}$, while $\mathcal{B}_{out\_edge}$ is the number of edges that connect boundary nodes and nodes in $\mathcal{S}$. Thus, $\mathcal{R}$ measures the fraction of those “inside-community” edges in all edges with one or more endpoints in $\mathcal{B}$ and community $\mathcal{D}$ is measured by the sharpness of the boundary given by $\mathcal{B}$.
 
-To find a local community for a start node in deterministic networks. Clauset \cite{clauset2005finding} and Chen \cite{chen2009detecting} proposed the local community identification algorithm based on the local modularity $\mathcal{R}$. The algorithm firstly place the start node in the community and its neighbors in the shell node set. At each step, the algorithm adds the neighbor node which gives the largest increase of $\mathcal{R}$ to the community. Then the algorithm update the community set, the boundary set, the shell node set and the $\mathcal{R}$ value. This process will not finish until there are no candidate nodes that could increase $\mathcal{R}$.
+To find a local community for a start node in deterministic networks, Clauset \cite{clauset2005finding} and Chen \cite{chen2009detecting} proposed the local community identification algorithm based on the local modularity $\mathcal{R}$. The algorithm firstly place the start node in the community and its neighbors in the shell node set. At each step, the algorithm adds the neighbor node which gives the largest increase of $\mathcal{R}$ to the community. Then the algorithm update the community set, the boundary set, the shell node set and the $\mathcal{R}$ value. This process will not finish until there are no candidate nodes that could increase $\mathcal{R}$.
 
 Similarly, Luo \cite{luo2008exploring} proposed the modularity $M$ for local community evaluation. Instead of measuring the internal edge fraction of boundary nodes, they directly compare the ratio of internal and external edges. The modularity $M$ is defined as:
 \begin{equation}
@@ -191,62 +243,11 @@ There are also algorithms that work with a different strategy, which is not base
 \subsection{Community Detection Algorithms for Uncertain Graphs}
 To deal with uncertain networks, one simple idea is thresholding: we assume that edges exist whenever their probability exceeds a certain threshold that we choose. Krogan et al. \cite{krogan2006global} first converted the uncertain network into a conventional binary network based on this idea, then applied traditional community detection algorithms to the conventional binary network. While this technique can certainly reveal useful information, it has some drawbacks. First, there is the issue of the choice of the threshold level. Krogan et al. used a value of 0.273 for their threshold, but there is little doubt that their results would be different if they had chosen a different value, and we have the question what threshold should we choose if we have a totally different uncertain network. Second, thresholding throws away potentially useful information. There is a substantial difference between an edge with probability 0.3 and an edge with probability 0.9, but the distinction is lost if one applies a threshold at 0.273.
 
-Dahlin et al. \cite{dahlin2011method} proposed a method which is based on sampling. The method mainly has three steps. Firstly, he samples candidate networks from the ensemble of certain networks that are consistent with the available information about the uncertain networks using Monte Carlo methods. Then, standard community detection methods can be applied to candidate networks. Lastly, he merges candidate communities into the most probable community structure of the uncertain network. This method also has its shortcomings. To get reliable communities, one needs to sample enough candidate networks, which will result in high computation complexity.
+Dahlin et al. \cite{dahlin2011method} proposed a method which is based on sampling. The method mainly has three steps. Firstly, he samples candidate networks from the ensemble of deterministic networks that are consistent with the available information about the uncertain networks using Monte Carlo methods. Then, standard community detection methods can be applied to candidate networks. Lastly, he merges candidate communities into the most probable community structure of the uncertain network. This method also has its shortcomings. To get reliable communities, one needs to sample enough candidate networks, which will result in high computation complexity.
 
 Liu et al. \cite{liureliable} proposed a generalized reliability criterion from two basic intuitions (purity and size balance) to overcome the challenges from standard reliability criterion, and developed a novel k-means algorithm to solve the uncertain clustering problem. The criterion is designed from an information-theoretic perspective, and the use of such a criterion enables the design of an extremely simple and efficient version of the k-means algorithm, while retaining the desired qualitative properties.
 
 Martin et al. \cite{martin2016structural} described a method for performing the common task of community detection on uncertain networks by fitting a generative network model to the data using a combination of an expectation maximization (EM) algorithm and belief propagation. They also shown how the resulting fit can be used to reconstruct the true underlying network by making predictions of which nodes are connected by edges. 
-
-\newpage
-
-\section{Centrality and Rank}
-A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
-\subsection{Degree Centrality}
-Degree centrality is one of the simplest centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
-\begin{equation}
-c^{deg}(i) = \frac{deg(i)}{n-1}
-\end{equation}
-The degree centrality is a measure of the size of $\mathcal{V}_i$'s immediate network. It gives some insight into the popularity of the node $\mathcal{V}_i$, but misses potentially important aspects of the whole architecture of the network and a node’s position in the network.
-\subsection{Closeness Centrality}
-Closeness centrality \cite{freeman1978centrality} is based on the network distance between a node and each other reachable node. It can be regarded as a measure of how long it will take to spread information from a start node to all other nodes sequentially. A path from $\mathcal{V}_i$ to $\mathcal{V}_j$ is called a shortest path if it minimizes the number of steps in the sequence, and the distance from $\mathcal{V}_i$ to $\mathcal{V}_j$, denoted $d(i,j)$, is the number of steps in such a shortest path from $\mathcal{V}_i$ to $\mathcal{V}_j$. In a connected graph, the closeness centrality of $\mathcal{V}_i$ is defined as the reciprocal of the average shortest path distance to $\mathcal{V}_i$ over all $n-1$ reachable nodes.
-\begin{equation}
-c^{clo}(i) = \frac{n-1}{\sum_{i\neq j}d(i,j)}
-\end{equation}
-When a graph is not strongly connected, Wasserman and Faust \cite{wasserman1994social} proposed an improved formula, which is a ratio of the fraction of nodes in the network which are reachable, to the average distance from the reachable nodes. It is defined as:
-\begin{equation}
-c^{clo}(i) = \frac{n-1}{N-1}\frac{n-1}{\sum_{i\neq j}d(i,j)}
-\end{equation}
-where $N$ is the total number of nodes in the network.
-
-\subsection{Betweenness Centrality}
-Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes. It was introduced as a measure for quantifying the control of a human on the communication between other humans in a social network by Linton Freeman \cite{freeman1977set}. It captures the role of a node as an intermediary in the transmission of information or resources between other nodes in the network. Nodes that have a high probability to occur on a randomly chosen shortest path between two randomly chosen nodes have a high betweenness. The betweenness centrality can be represented as:
-\begin{equation}
-c^{bet}(i) = \sum_{s\neq v \neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}
-\end{equation}
-where $\sigma_{st}$ is the total number of shortest paths from node $\mathcal{V}_s$ to node $\mathcal{V}_t$ and $\sigma_{st}(v)$ is the number of those paths that pass through $\mathcal{V}_v$.
-
-%(What about disconnected network?)
-\subsection{Eigenvector Centrality}
-Eigenvector centrality \cite{bonacich1987power} is a measure of the influence of a node in a network. It computes the centrality for a node based on the centrality of its neighbors. It assumes that connections to high-scoring nodes contribute more to the score of the node in question than equal connections to low-scoring nodes. The relative centrality score of node $\mathcal{V}_i$ can be defined as:
-\begin{equation}
-c^{eig}(i) = \frac{1}{\lambda}\sum_{\mathcal{V}_j\in \Gamma(i)}c^{eig}(j)
-\end{equation}
-where $\Gamma(i)$ is a set of the neighbors of $\mathcal{V}_i$ and $\lambda$ is a constant. It can also be rewritten in vector notation as the eigenvector equation:
-\begin{equation}
-AC^{eig}=\lambda C^{eig}
-\end{equation}
-where $C^{eig} = (c^{eig}(1),c^{eig}(2),...,c^{eig}(n))$; $A=(a_{i,j})$ is the adjacency matrix, i.e. $a_{i,j}=1$ if node $\mathcal{V}_i$ is linked to node $\mathcal{V}_j$, and $a_{i,j}=0$ otherwise.
-
-The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the first algorithm that was used by the company, and it is the best-known.
-
-\subsection{Centrality Measures in Uncertain Graphs} \label{CMIUG} 
-In order to model the effect of relationship uncertainty on network connectivity, Sevon et al. \cite{sevon2006link} developed a method for biological databases. They proposed to transform the probabilities into weights by taking the negative logarithm of the probabilities:
-\begin{equation}
-w(e) = -\log(p(e))
-\end{equation}
-Then standard algorithms for finding shortest paths can be applied. Closeness centrality and betweenness centrality can also be calculated based on shortest paths.
-
-Pfeiffer and Neville \cite{pfeiffer2010probabilistic} formulated a measure of centrality based on the most probable paths of communication, rather than shortest paths. They developed a notion of probabilistic paths in uncertain networks, and used it as a foundation for computing probabilistic betweenness centrality in networks evolving over time. The motivation behind this approach is as follows: Conventional betweenness centrality uses shortest paths as an indication of how quickly information can potentially flow in the network. When adopting a probabilistic view of the network, information flowing across paths with fewer nodes is less important than whether the information is successfully transmitted. In this case, central nodes should correspond to nodes that have high probability of transferring information throughout the graph, regardless of path length.
 
 
 \end{document}

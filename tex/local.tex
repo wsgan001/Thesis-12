@@ -4,7 +4,7 @@
 \providecommand{\main}{..}
 \documentclass[\main/thesis.tex]{subfiles}
 \externaldocument{previous}
-\externaldocument{link}
+\externaldocument{generator}
 
 \onlyinsubfile{\externaldocument{\main/tex/introduction}}
 
@@ -219,9 +219,9 @@ $c_{max}$  & 25    & maximum for the community sizes \\ \hline
 \end{tabular}
 \end{table}
 \subsection*{Generating Uncertain Networks}
-Since there are not many publicly available uncertain network datasets on the web, we use Algorithm \ref{Uncertain-Network-Generator} as mentioned in Section \ref{Synthetic-Uncertain-Network-Based-on-Deterministic-Network} to generate uncertain networks based on the former 3 certain networks. 
+Since there are not many publicly available uncertain network datasets on the web, we use Algorithm \ref{Uncertain-Network-Generator} as mentioned in Chapter \ref{generator-chapter} to generate uncertain networks based on the former 3 deterministic networks. 
 
-In experiments, the percentage of non-existential edges we choose to add range from 10\% to 40\%. Besides, we also evaluate our algorithm on original certain networks, which can be regarded as a special case of uncertain networks.
+In experiments, the percentage of non-existential edges we choose to add range from 10\% to 40\%. Besides, we also evaluate our algorithm on original deterministic networks, which can be regarded as a special case of uncertain networks.
 
 \subsection{Evaluation}
 The most important step is to evaluate our algorithm on real-world networks and synthetic networks. In this section, we compare our algorithm (UR+K) and other algorithms by supervised evaluation and unsupervised evaluation. The name for these algorithms and their corresponding descriptions are shown in Table \ref{Algorithm_list}. We mainly focus on the comparison between our algorithm and the other two local community detection algorithms (R and UR). Though Louvain algorithm is not a local community detection algorithm, we also compare our algorithm with it and its variant because it is also a greedy optimization method and it is always regarded as a baseline in the research of community mining. As mentioned previously, in our algorithm, $\lambda$ is a tunable hyper-parameter. In this section, we choose $\lambda=3$, and we will demonstrate how we find the optimal $\lambda$ in Section \ref{Hyper-Parameter-Evaluation-Local}.
@@ -298,7 +298,7 @@ The results on three networks are shown in Figure \ref{supervised-result-local}.
 \includegraphics[scale = 0.23]{\main/img/image5.jpeg}
 \centering
 \includegraphics[scale = 0.23]{\main/img/image6.jpeg}
-\caption{Algorithm results on karate club, football and synthetic networks. For each network, we add 10\%, 20\%, 30\% and 40\% non-existential edges to the original network. The original network is also regarded as a special case of uncertain network. Therefore, each certain network can generate 5 uncertain networks in total. For each uncertain network, we compare our algorithm (UR+K) with the other 4 algorithms. The precision, recall and f1-measure values of each algorithm are all shown in the graphs. The f1-measure values gained by different algorithms are represented by different colored bars. Each f1-measure value's corresponding precision and recall values are represented by its inner black bar and external white bar respectively. For example, the part wrapped in a red frame represents the results gained by algorithm R on original karate club data. The f1-measure, precision and recall values are 0.6603, 0.848 and 0.5406 respectively.}
+\caption{Algorithm results on karate club, football and synthetic networks. For each network, we add 10\%, 20\%, 30\% and 40\% non-existential edges to the original network. The original network is also regarded as a special case of uncertain network. Therefore, each deterministic network can generate 5 uncertain networks in total. For each uncertain network, we compare our algorithm (UR+K) with the other 4 algorithms. The precision, recall and f1-measure values of each algorithm are all shown in the graphs. The f1-measure values gained by different algorithms are represented by different colored bars. Each f1-measure value's corresponding precision and recall values are represented by its inner black bar and external white bar respectively. For example, the part wrapped in a red frame represents the results gained by algorithm R on original karate club data. The f1-measure, precision and recall values are 0.6603, 0.848 and 0.5406 respectively.}
 \label{supervised-result-local}
 \end{figure}
 
@@ -399,7 +399,7 @@ From Figure \ref{supervised-result-local}, we can observe that our algorithm (UR
 % \end{table}
 
 \subsection*{Unsupervised Evaluation}
-Since we generate uncertain networks based on certain networks. When we evaluate our algorithm in the supervised way, we assume that uncertain networks have the same community ground truth as their corresponding certain networks. This assumption is true if we only add a few noise edges to uncertain networks because small number of noise edges will not have impact on the community structure. However, with the increase in the number of noise edges, some communities may merge into one community. In this scenario, using original community labels will cause problems.
+Since we generate uncertain networks based on deterministic networks. When we evaluate our algorithm in the supervised way, we assume that uncertain networks have the same community ground truth as their corresponding deterministic networks. This assumption is true if we only add a few noise edges to uncertain networks because small number of noise edges will not have impact on the community structure. However, with the increase in the number of noise edges, some communities may merge into one community. In this scenario, using original community labels will cause problems.
 
 To solve this problem, we also propose an unsupervised way to evaluate our algorithm. As mentioned in Section \ref{Local-Community-Detection-Algorithms-Review}, the local community modularity $\mathcal{R}$ can be used to measure the quality of the local community. In the uncertain networks scenario, we can use $\mathcal{UR}$ to take the place of $\mathcal{R}$. Therefore, to compare different algorithms, we can compare local community modularity $\mathcal{UR}$ values after running different algorithms.
 
