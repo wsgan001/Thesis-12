@@ -11,12 +11,12 @@
 
 \begin{document}
 \chapter{Link Prediction}
-As we discussed in Section \ref{neighbor-based-metrics}, common-neighbors-based metrics are the simplest yet effective to predict missing links. They assume that two nodes are more likely to be connected if they have more common neighbors. Common neighbors (CN) is one of the most widespread measurements used in link prediction problem mainly due to its simplicity \cite{newman2001clustering}. Resource Allocation (RA) metric \cite{zhou2009predicting} is regarded as one of the best neighbor-based metrics because of its performance. Therefore, in this Chapter, we concentrate on CN and RA index.
+As we discussed in Section \ref{neighbor-based-metrics}, common-neighbors-based metrics are the simplest yet effective to predict missing links. They assume that two nodes are more likely to be connected if they have more common neighbors. Common neighbors (CN) is one of the most widespread measure used in the link prediction problem mainly due to its simplicity \cite{newman2001clustering}. The Resource Allocation (RA) metric \cite{zhou2009predicting} is regarded as one of the best neighbor-based metrics because of its performance. Therefore, in this Chapter, we concentrate on CN and RA indexes.
 \section{Link Prediction for Uncertain Graphs}
 \subsection{Uncertain Version of Neighbor-based Metrics} \label{Uncertain-Version-of-Neighbor-based-Metrics}
-To solve the problem of link prediction for uncertain graphs, one very naive/intuitive way is to regard the probability as a weight and apply weighted similarity metrics. However, there exists some problems. Figure \ref{problem-consider-probability-as-weight-link} is an example.
+To solve the problem of link prediction for uncertain graphs, one very na\"{\i}ve/intuitive way is to regard the probability as a weight and apply weighted similarity metrics. However, this is not necessarily appropriate and may mislead the prediction of absent connections. Figure \ref{problem-consider-probability-as-weight-link} is an example illustrating such a problem.
 
-Nodes $\mathcal{V}_A$ and $\mathcal{V}_B$ are more likely to be connected than nodes $\mathcal{V}_D$ and $\mathcal{V}_E$ based on Equation \ref{WCN-previous}.
+Nodes $\mathcal{V}_A$ and $\mathcal{V}_B$ are more likely to be connected than nodes $\mathcal{V}_D$ and $\mathcal{V}_E$ based on Equation \ref{WCN-previous} for Weighted Common Neighbors.
 \begin{equation}
 s_{AB} = 0.2 + 0.9 = 1.1
 \end{equation}
@@ -28,20 +28,20 @@ s_{DE} = 0.5 + 0.5 = 1.0 < 1.1
 \includegraphics[scale = 0.3]{\main/img/common_neighbor_2.png}
 \includegraphics[scale = 0.3]{\main/img/common_neighbor_1.png}
 \centering
-\caption{An example showing the problem when considering the probability as a weight}
+\caption{An example showing the problem when considering the probability as a weight. A-B would seem to have a higher probability to exist than D-E}
 \label{problem-consider-probability-as-weight-link}
 \end{figure}
 
-However, because each edge may exist or not exist in the real world, both these two uncertain graphs have 4 possible worlds, as can be seen in Figure \ref{possible-world-link}.
+However, because each edge may exist or not exist in the real world, both of these two uncertain graphs have four possible worlds, as can be seen in Figure \ref{possible-world-link}: both links may exist, both may be absent, or either one is present.
 
 \begin{figure}
 \includegraphics[scale = 0.3]{\main/img/possible_world.png}
 \centering
-\caption{Possible worlds}
+\caption{Possible worlds for two uncertain links between three nodes}
 \label{possible-world-link}
 \end{figure}
 
-Only when both edges $\mathcal{E}_{AC}$ and $\mathcal{E}_{BC}$ exist, node $\mathcal{V}_C$ is the common neighbor of nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, as Figure \ref{possible-world-link}(1), the probability for this case is $0.2\times 0.9=0.18$. In this case, $s_{AB}=1$ based on Equation \ref{CN-previous}. If node $\mathcal{V}_C$ is not the common neighbor of nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, as Figure \ref{possible-world-link}(2-4),  then $s_{AB}=0$. The probability for this case is 0.82. In comparison, the probability that $s_{DE}=1$ is $0.5\times 0.5=0.25$, while the probability of $s_{DE}=0$ is 0.75. Therefore, nodes $\mathcal{V}_D$ and $\mathcal{V}_E$ are more likely to be connected than nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, because the probability of $s_{DE}=1$ is larger than $s_{AB}=1$. 
+Only when both edges $\mathcal{E}_{AC}$ and $\mathcal{E}_{BC}$ exist, node $\mathcal{V}_C$ is the common neighbor of nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, as Figure \ref{possible-world-link}(1), the probability for this case is $0.2\times 0.9=0.18$. In this case, $s_{AB}=1$ based on Equation \ref{CN-previous}. If node $\mathcal{V}_C$ is not the common neighbor of nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, as Figure \ref{possible-world-link}(2, 3 and 4),  then $s_{AB}=0$. The probability for this case is 0.82. In comparison, the probability that $s_{DE}=1$ is $0.5\times 0.5=0.25$, while the probability of $s_{DE}=0$ is 0.75. Therefore, nodes $\mathcal{V}_D$ and $\mathcal{V}_E$ are more likely to be connected than nodes $\mathcal{V}_A$ and $\mathcal{V}_B$, because the probability of $s_{DE}=1$ is larger than the probability of $s_{AB}=1$. 
 
 From this example, we can find that each uncertain edge in an uncertain graph may exist or not exist in a real world. If an uncertain graph has $|\mathcal{E}|$ uncertain edges, there will be $2^{|\mathcal{E}|}$ possible worlds in total, since each edge provides us with a binary sampling decision.
 
@@ -67,10 +67,10 @@ s_{xy}=\sum_{G\in \mathcal{G}}( Pr(G)\times|\Gamma_G(x)\cap\Gamma_G(y)|) \label{
 s_{xy}=\sum_{G\in \mathcal{G}}( Pr(G)\times\sum_{z\in \Gamma_G(x)\cap\Gamma_G(y)}\frac{1}{k_G(z)}) \label{URA-link}
 \end{equation}
 
-Here, $\Gamma_G(x)$ denotes the set of neighbors of node $\mathcal{V}_x$ in the possible world $G$, $k_G(x)$ is the degree of node $\mathcal{V}_x$ in the possible world $G$.
+Here, $\Gamma_G(x)$ denotes the set of neighbors of node $\mathcal{V}_x$ in the possible world $G$; $k_G(x)$ is the degree of node $\mathcal{V}_x$ in the possible world $G$.
 
 \subsection{UCN Complexity Analysis} \label{CN-Complexity-Analysis}
-We have a total of $2^{|\mathcal{E}|}$ possible worlds, and we can calculate CN value for each possible world in $O(k)$, where $k$ is nodes' average degree in the possible world. Therefore, the time complexity of calculating Common Neighbors value based on Equation \ref{UCN-link} is $O(2^{|\mathcal{E}|}k)$.
+We have a total of $2^{|\mathcal{E}|}$ possible worlds, and we can calculate CN value for each possible world in $O(k)$, where $k$ is nodes' average degree in the possible world. Therefore, the time complexity of calculating the Common Neighbors value based on Equation \ref{UCN-link} is $O(2^{|\mathcal{E}|}k)$.
 
 Assume $\Gamma_{xy} = \Gamma(x)\cap\Gamma(y)$ is the common neighbors set of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in uncertain graph $\mathcal{G}$. Whether a node $\mathcal{V}_z \in \Gamma_{xy}$ is a common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in a possible world is independent of other nodes because it is determined by the existence of edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ in the possible world. Therefore, each node in $\Gamma_{xy}$ can be considered independently. If the existence probability over uncertain edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$ are $\mathcal{P}_{x,z}$ and $\mathcal{P}_{y,z}$ respectively, only in $\mathcal{P}_{x,z}\times\mathcal{P}_{y,z}$ of all possible worlds, node $\mathcal{V}_z$ is the common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$. Therefore, Equation \ref{UCN-link} can also be represented as:
 \begin{align*}
@@ -82,13 +82,13 @@ s_{xy}&=\sum_{G\in \mathcal{G}}( Pr(G)\times|\Gamma_G(x)\cap\Gamma_G(y)|)\\
 
 When $z\in \Gamma_G(x)\cap\Gamma_G(y)$, $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)=1$, otherwise, $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)=0$.
 
-By doing so, the time complexity for calculating $s_{xy}$ can be reduced to $O(K)$, where $K$ is nodes' average degree in the uncertain network.
+By doing so, the time complexity for calculating $s_{xy}$ can be reduced to $O(K)$, where $K$ is the nodes' average degree in the uncertain network.
 %For each common neighbors in possible worlds, they are also common neighbors of two nodes in uncertain graphs. Therefore, each nodes of common neighbors in uncertain graph can be considered independently.
 \subsection{URA Complexity Analysis}
 We have a total of $2^{|\mathcal{E}|}$ possible worlds, and nodes' average degree in the possible world is $k$, then we can calculate RA value for each possible world in $O(k)$, so the time complexity of calculating Resource Allocation value based on Equation \ref{URA-link} is $O(2^{|\mathcal{E}|}k)$.
 %(To calculate the RA value between node $x$ and node $y$, we only need consider edges connecting node $x$ and node $y$'s common neighbors. Assume the average degree of each node is $n$, then the number of edges connecting common neighbors is $mn$, so the time complexity can be reduced to $O(2^{mn}m)$.) \\
 
-As mentioned in Section \ref{CN-Complexity-Analysis}, whether a node $\mathcal{V}_z \in \Gamma_{xy}$ is a common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in a possible world is independent of other nodes, besides, the number of edges each common neighbor owning is also independent of other nodes.  Therefore, each common neighbor can also be considered independently in this case. For the common neighbor node $\mathcal{V}_z$, when we generate possible worlds, we can only consider edges connecting to it, because the existence of other edges will not have an impact on $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)$ and $k_G(z)$. Nodes' average degree in the uncertain network is $K$, so we can only consider $2^K$ possible worlds for the node $\mathcal{V}_z$, and the time complexity can be reduced to $O(2^{K}t)$, where $t=|\Gamma_G(x)\cap\Gamma_G(y)|$. 
+As mentioned in Section \ref{CN-Complexity-Analysis}, whether a node $\mathcal{V}_z \in \Gamma_{xy}$ is a common neighbor of nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ in a possible world is independent of other nodes. Besides, the number of edges each common neighbor has is also independent of other nodes.  Therefore, each common neighbor can also be considered independently in this case. For the common neighbor node $\mathcal{V}_z$, when we generate possible worlds, we can consider only edges connecting to it, because the existence of other edges will not have an impact on $\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)$ and $k_G(z)$. The nodes' average degree in the uncertain network is $K$, so we can consider $2^K$ possible worlds for the node $\mathcal{V}_z$, and the time complexity can be reduced to $O(2^{K}t)$, where $t=|\Gamma_G(x)\cap\Gamma_G(y)|$. 
 \begin{align*}
 s_{xy}&=\sum_{G\in \mathcal{G}}( Pr(G)\times\sum_{z\in \Gamma_G(x)\cap\Gamma_G(y)}\frac{1}{k_G(z)})\\
 &=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\sum_{G\in \mathcal{G}}Pr(G)\times\mathbb{I}_{\Gamma_G(x)\cap\Gamma_G(y)}(z)\times k_G(z)\\
@@ -121,7 +121,7 @@ s_{xy}&=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\sum_{{G_z}\in \mathcal{G}_z}Pr({G_z})
 % &=\sum_{n=0}^{m}P_{1\rightarrow m}^n \times \frac{1}{n+2}
 % \end{align*}
 
-For the common neighbor $\mathcal{V}_z$, assume there are $m$ edges connecting to it except edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$, so we can index them from 1 to $m$. $P_{1\rightarrow m}^n$ here stands for from edges $e_1$ to $e_m$, the probability that exactly $n$ among them exist in possible worlds. For the node with $m$ edges in uncertain graph, the number of its edges in possible worlds will range from 0 to $m$, and in other words, we need to compute $P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^m$. 
+For the common neighbor $\mathcal{V}_z$, assume there are $m$ edges connecting to it except edges $\mathcal{E}_{xz}$ and $\mathcal{E}_{yz}$, so we can index them from 1 to $m$. $P_{1\rightarrow m}^n$ here stands for from edges $e_1$ to $e_m$, the probability that exactly $n$ among them exist in possible worlds. For the node with $m$ edges in the uncertain graph, the number of its edges in possible worlds will range from 0 to $m$, and in other words, we need to compute $P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^m$. 
 %We proposed an efficient way to compute them, which works like merge sort. Conceptually, it works as follows:\\
 
 We propose an efficient way to compute them, which can be regarded as a divide and conquer algorithm. Conceptually, it works as follows:
@@ -235,7 +235,7 @@ P_{m+1\rightarrow m+2}^0 P_{1\rightarrow m}^{2} + P_{m+1\rightarrow m+2}^1 P_{1\
 \right.
 \end{align*}
 
-These equations are easy to solve, after we get $A$ and $C$, we can calculate probability list $[P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$ in $O(m)$. Though it takes $O(m^2)$ time to calculate $A$, when we consider different pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, $A$ only needs to be calculated once. To calculate different pairs of unconnected nodes' corresponding probability list $B$, we can firstly calculate their probability $C$ in constant time, and then use $A$ and $C$ to calculate $B$ in $O(m)$. Because we have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes, the time complexity of calculating $A$ can be ignored. To calculate node $\mathcal{V}_z$'s contribution for all unconnected nodes which have common neighbor $\mathcal{V}_z$, the time complexity is $O(m^3)$, and the average time complexity of calculating node $\mathcal{V}_z$'s contribution for a certain pair of unconnected nodes will be $O(m)$. To calculate $s_{xy}$, we can calculate nodes $\mathcal{V}_x$ and $\mathcal{V}_y$'s each common neighbor's contribution for $s_{xy}$ in $O(m)$, because nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ have $t$ common neighbors in total. The time complexity of computing $s_{xy}$ is $O(mt)$. The overall algorithm for calculating $s_{xy}$ can be found in Algorithm \ref{Resource-Allocation-Value-Calculation}. Before running Algorithm \ref{Resource-Allocation-Value-Calculation}, we need to do the initialization step, which is described in Algorithm \ref{Initialization}. In Algorithm \ref{Initialization}, we iterate through all nodes in graph $\mathcal{G}$, calculate their probability lists $A$ and save them in a hash table. The hash table will be used in Algorithm \ref{Resource-Allocation-Value-Calculation}.
+These equations are easy to solve, after we get $A$ and $C$, we can calculate the probability list $[P_{1\rightarrow m}^0, P_{1\rightarrow m}^1, ..., P_{1\rightarrow m}^{m}]$ in $O(m)$. Though it takes $O(m^2)$ time to calculate $A$, when we consider different pairs of unconnected nodes which have common neighbor $\mathcal{V}_z$, $A$ only needs to be calculated once. To calculate different pairs of unconnected nodes' corresponding probability list $B$, we can firstly calculate their probability $C$ in constant time, and then use $A$ and $C$ to calculate $B$ in $O(m)$. Because we have $(\frac{(m+2)(m+1)}{2}-u)$ pairs of unconnected nodes, the time complexity of calculating $A$ can be ignored. To calculate node $\mathcal{V}_z$'s contribution for all unconnected nodes which have common neighbor $\mathcal{V}_z$, the time complexity is $O(m^3)$, and the average time complexity of calculating node $\mathcal{V}_z$'s contribution for a certain pair of unconnected nodes will be $O(m)$. To calculate $s_{xy}$, we can calculate nodes $\mathcal{V}_x$ and $\mathcal{V}_y$'s each common neighbor's contribution for $s_{xy}$ in $O(m)$, because nodes $\mathcal{V}_x$ and $\mathcal{V}_y$ have $t$ common neighbors in total. The time complexity of computing $s_{xy}$ is $O(mt)$. The overall algorithm for calculating $s_{xy}$ can be found in Algorithm \ref{Resource-Allocation-Value-Calculation}. Before running Algorithm \ref{Resource-Allocation-Value-Calculation}, we need to do the initialization step, which is described in Algorithm \ref{Initialization}. In Algorithm \ref{Initialization}, we iterate through all nodes in graph $\mathcal{G}$, calculate their probability lists $A$ and save them in a hash table. The hash table will be used in Algorithm \ref{Resource-Allocation-Value-Calculation}.
 
 \begin{algorithm}
 \KwData{An uncertain graph $\mathcal{G}$.}
@@ -278,65 +278,130 @@ return $result$\;
 \end{algorithm}
 
 \section{Experiments}
+We, first, present the real datasets we used in our experiments and the approach we adopt to generate uncertain networks. Then, we evaluate our approach in contrast with the original CN, RA and their weighted versions, as well as other state-of-art link prediction approaches. 
+
 \subsection{Datasets}
 \subsection*{Protein-Protein Interaction Network }
 We used the protein-protein interaction network (PPI) created by Krogan \cite{krogan2006global}. Two proteins are linked if it is likely that they interact. The core network consists of 2708 proteins and 7123 interactions labeled with probabilities.
 
 \subsection*{Enron Network}
-We used the Enron dataset compiled by Shetty and Adibi \cite{shetty2004enron}. The dataset is a subset of Enron employees, comprised of emails sent between employees, resulting in a dataset with 50,572 emails among 151 employees. We used the same method as Section 5 in  \cite{pfeiffer2010probabilistic} to assign each edge with a possibility of occurrence. 
+We used the Enron dataset compiled by Shetty and Adibi \cite{shetty2004enron}. The dataset is a subset of Enron employees, comprised of emails sent between employees, resulting in a dataset with 50,572 emails among 151 employees. We used the same method as Pfeiffer and Neville in  \cite{pfeiffer2010probabilistic} to assign each edge with a possibility of occurrence. 
 
 \subsection*{Synthetic Uncertain Network Based on Deterministic Network} \label{Synthetic-Uncertain-Network-Based-on-Deterministic-Network}
 Since there are not many publicly available uncertain network datasets, we also generated an uncertain network based on a deterministic network. The dataset we used here is USAir. The US air transportation network contains 332 airports and 2126 airlines. Based on this network, we use the uncertain network generator  (Algorithm \ref{Uncertain-Network-Generator} as mentioned in Chapter \ref{generator-chapter}) to generate its corresponding uncertain network. In this experiment, the percentage of non-existential edges we choose to add is 20\%.
 
+\subsection{Experiments}
+
 To test the prediction performance of an algorithm, the observed edges, $E$, are divided into two separate sets: training set $E^T$, is regarded as known information; and probe set $E^P$, is used for testing and no information therein is allowed to be used for prediction. Clearly, we have $E^T \cup E^P = E$ and $E^T \cap E^P = $\o. 
 
-For protein-protein interaction network and synthetic uncertain network, we only know their connection information, so the training set $E^T$ and the probe set $E^P$ can be randomly divided. In this thesis, the training set $E^T$ and the probe set $E^P$ are assumed to contain 90\% and 10\% of the links respectively. To get more reliable result, each value is obtained by averaging over 100 independent runs of random division of training set and probe set.
+For the protein-protein interaction network and the synthetic uncertain network, we only know their connection information, so the training set $E^T$ and the probe set $E^P$ can be randomly divided. In this paper, the training set $E^T$ and the probe set $E^P$ are assumed to contain 90\% and 10\% of the links respectively. To get more reliable result, each value is obtained by averaging over 100 independent runs of random divisions of the training set and probe set.
 
-Link prediction algorithms should be capable of detecting the dynamic relationships between members in a temporal social network. Because Enron dataset is time-evolving, the relations among social members change continuously over time, and links are constantly varying and evolving. Using link prediction algorithms, we can predict newly added links in future networks. In the experiment, we predict new communications between two employees in Enron Corporation after Dec. 5, 2000, based on historical data. The idea is that, if two employees have email records before Dec. 5, 2000, we generate a potential edge between them. Then we assign these edges with a probability following the method described in  \cite{shetty2004enron}. The resulting probabilistic graph consists of 110 nodes and 388 edges, and this graph is regarded as the training set. The testing set is formed by taking in all the edges formed after Dec. 5, 2000. After discarding employees that have not appeared in the list of 110 employees, as well as the edges that have appeared both before and after Dec. 5, 2000, we obtained 574 ground-truth edges with 110 distinct employees.
-%Link prediction algorithms should be capable of detecting dynamic relationships between members in a temporal social network. Because Enron dataset is time-evolving, the relations among social members change continuously over time, links are constantly varying and evolving. Using link prediction algorithms, we can predict newly added links in future networks. In the experiment, we predict new communications between two employees in Enron Corporation after (a certain time), based on historical data. The idea is that, if two employees have email records before (a certain time), we generate a potential edge between them. Then we assign these edges with a probability following the method described in  \cite{shetty2004enron}. (Specifically, ...) The resulting probabilistic graph consists of ... nodes and ... edges, and this graph is regarded as training set. The testing set is formed by taking in all edges formed (after a certain time). After discarding employees that have not appeared in the list of ... nodes, as well as the edges that have appeared both (from 2001 to 2004) and (from 2005 to 2009) (before ... and ...), we obtained ... ground-truth edges with ... distinct authors.
-%Because relations among social members change continuously over time, links in real world social networks are constantly varying and evolving. New links may appear and existing links may vanish from the network. For example, email communications between friends, transactions between businesses, and partnerships between scientific researchers are changing over time. Therefore, link prediction algorithms should be capable of detecting dynamic relationships between members in a temporal social network.
+Link prediction algorithms should be capable of detecting the dynamic relationships between members in a temporal social network. Because the Enron dataset is time-evolving, the relations among social members change continuously over time, and links are constantly varying and evolving. Using link prediction algorithms, we should be able to predict newly added links in future networks. In the experiment, we predict new communications between two employees in Enron Corporation after Jan. 16, 2001, based on historical data. The idea is that, if two employees have email records before Jan. 16, 2001, we generate a potential edge between them. Then we assign these edges with a probability following the method described in  \cite{shetty2004enron}. The resulting probabilistic graph consists of 113 nodes and 419 edges, and this graph is regarded as the training set. The testing set is formed by taking in all the edges formed after Jan. 16, 2001. After discarding employees that have not appeared in the list of the 113 employees, as well as the edges that have appeared both before and after Jan. 16, 2001, we obtained 578 ground-truth edges with 113 distinct employees.
 
-To evaluate the performance of prediction algorithms, we apply a standard metric called Precision to quantify the accuracy of prediction, which focuses on top-ranked latent links. It is defined as $L_r/L$, where among top-$L$ candidate links, $L_r$ is the number of accurate predicted links actually appearing in the testing period.
+To evaluate the performance of prediction algorithms, we apply a standard Precision metric to quantify the accuracy of the prediction, which focuses on top-ranked latent links. It is defined as $L_r/L$, where among top-$L$ candidate links, $L_r$ is the number of accurate predicted links actually appearing in the testing period.
 
 
 \subsection{Results and Evaluation}
-As the literature  \cite{lu2010link,lu2011link,liu2011link,tan2014link,zhu2016link} suggested, the top $L$ is set to 100 in our experiments. To evaluate our metrics, we compare the results computed by the uncertain version of graph proximity measures with weighted and unweighted ones. The name for these algorithms and their corresponding descriptions are shown in Table \ref{algorithm-list-link}.%In the task of link prediction for uncertain networks, we can (1) pay no attention to probabilities and use the original metrics; (2) regard probability as weight and use weighted common-neighbor-based metrics; (3) use our uncertain version of common-neighbor-based metrics.\\
-% Use uncertain version of common-neighbor-based metrics.
+As the literature suggested \cite{lu2010link,lu2011link,liu2011link,tan2014link,zhu2016link}, the top $L$ is set to 100 in our experiments. In this section, we compare our metrics (UCN and URA) and other metrics/algorithms using existing ground truth. The name for these metrics/algorithms and their corresponding descriptions are shown in Table \ref{algorithm-list-link}. To evaluate our metrics, we mainly focus on the comparison between the uncertain version of graph proximity measures with weighted and unweighted ones. Besides, we also use the LNB model and the SRW metric (with different parameters) to assess our metrics as they are popular and considered as state-of-the-art. LNB is a local Na{\"\i}ve Bayes model which is based on neighbor-based metrics, and SRW is a local-random-walk-based algorithm (we choose $t=2$ and $t=3$ in our experiments because they are the optimal choices based on Liu and L{\"u}'s experiments in \cite{liu2010link}). Since LNB and SRW algorithms are for deterministic networks, in our experiments we ignore the edge probabilities and consider uncertain networks as normal deterministic networks.
 
 \begin{table}[]
 \centering
 \caption{Algorithm List}
 \label{algorithm-list-link}
-\begin{tabular}{ccc}
+\begin{tabular}{c|c}
 \hline
-Algorithm Name & Description                     \\ \hline
-CN/RA      & Pay no attention to probabilities and use the original metrics.  \\
-WCN/WRA       & Regard probability as weight and use weighted metrics.  \\
-UCN/URA    & Use our uncertain version of graph proximity measures. \\ \hline
+Algorithm Name & Description                                                                                                                                                                       \\ \hline
+CN/RA          & \begin{tabular}[c]{@{}c@{}}Pay no attention to probabilities\\  and use the original metrics.\end{tabular}                                                                        \\ \hline
+WCN/WRA        & \begin{tabular}[c]{@{}c@{}}Regard probability as weight\\  and use weighted metrics.\end{tabular}                                                                                 \\ \hline
+UCN/URA        & \begin{tabular}[c]{@{}c@{}}Use our uncertain version\\  of graph proximity measures.\end{tabular}                                                                                 \\ \hline
+SRW2           & \begin{tabular}[c]{@{}c@{}}Pay no attention to probabilities and \\run local random walk algorithm as \\ mentioned in \cite{liu2010link}, and we choose $t=2$\end{tabular}     \\ \hline
+SRW3           & \begin{tabular}[c]{@{}c@{}}Pay no attention to probabilities and \\run local random walk algorithm as\\  mentioned in \cite{liu2010link}, and we choose $t=3$\end{tabular}     \\ \hline
+LNB-CN         & \begin{tabular}[c]{@{}c@{}}Pay no attention to probabilities and\\ use Local Na{\"\i}ve Bayes form of \\Common Neighbors as mentioned in \cite{liu2011link}\end{tabular}    \\ \hline
+LNB-RA         & \begin{tabular}[c]{@{}c@{}}Pay no attention to probabilities and\\ use Local Na{\"\i}ve Bayes form of \\Resource Allocation as mentioned in \cite{liu2011link}\end{tabular} \\ \hline
 \end{tabular}
 \end{table}
 
-The prediction accuracy on the 3 networks are shown in Table \ref{experiment-result-link}.
+The prediction accuracies on the three networks are shown in Table \ref{experiment-result-link} and Figures \ref{experiment-result-image-link-1}, \ref{experiment-result-image-link-2}. PPI illustrates the efficacy for predicting connections in real uncertain networks, Enron for predicting future connections in temporal networks, and a synthetic network. 
+
+\begin{table*}[]
+\centering
+\caption{Comparative Results for the original, weighted and uncertain versions of Common Neighbors and Resource Allocation}
+\label{experiment-result-link}
+\begin{tabular}{c|c|c|c|c|c|c}
+\hline
+\multirow{2}{*}{Datasets} & \multicolumn{3}{c|}{Common Neighbor} & \multicolumn{3}{c}{Resource Allocation}  \\ \cline{2-7}
+                          & CN      & WCN    & UCN               & RA       & WRA      & URA \\ \hline
+PPI                       & 0.472   & 0.5045 & \textbf{0.5288} & 0.4123   & 0.45     & \textbf{0.5728}\\ \hline
+Enron                     & 0.49    & 0.52   & \textbf{0.61}   & 0.51     & 0.47     & \textbf{0.52}\\ \hline
+Synthetic Network         & 0.5812  & 0.5954 & \textbf{0.6043} & 0.6075   & 0.6124   & \textbf{0.6233}\\ \hline
+\end{tabular}
+
+\end{table*}
 
 \begin{table}[]
 \centering
-\caption{Results}
-\label{experiment-result-link}
-\begin{tabular}{c|c|c|c||c|c|c}
+%\caption{My caption}
+%\label{my-label}
+\begin{tabular}{c|c|c|c|c}
 \hline
-\multirow{2}{*}{Datasets} & \multicolumn{3}{c||}{Common Neighbor}              & \multicolumn{3}{c}{Resource Allocation} \\ \cline{2-7} 
-                          & CN            & WCN             & UCN             & RA        & WRA      & URA               \\ \hline
-PPI                       & 0.472         & 0.5045          & \textbf{0.5288} & 0.4123    & 0.45     & \textbf{0.5728}   \\ \hline
-Enron                     & \textbf{0.53} & 0.51            & 0.51            & 0.43      & 0.35     & \textbf{0.51}     \\ \hline
-Synthetic Network         & 0.586         & \textbf{0.5892} & 0.5764          & 0.5772    & 0.5832   & \textbf{0.5902}   \\ \hline
+Datasets          & SRW2 \cite{liu2010link}   & SRW3 \cite{liu2010link}  & LNB-CN \cite{liu2011link} & LNB-RA \cite{liu2011link} \\ \hline
+PPI               & 0.4136 & 0.5284 & 0.4856 & 0.4992 \\ \hline
+Enron             & 0.43   & 0.45   & 0.55   & 0.46   \\ \hline
+Synthetic Network & 0.5852 & 0.5992 & 0.5962 & 0.5885 \\ \hline
 \end{tabular}
 \end{table}
 
-From Table \ref{experiment-result-link}, we can find observe that uncertain version of Resource Allocation metric can significantly outperform the original and weighted Resource Allocation metrics. This shows that in the task of link prediction with edge uncertainty, it is worthwhile to take every possible worlds into account.
+\begin{figure*}
+\centering
+\includegraphics[scale = 1.2]{\main/img/Result-Fig1.png}
+\caption{Visual comparison of the accuracy for link prediction with UCN and URA with wighted and unweighted versions.}
+\label{experiment-result-image-link-1}
+\end{figure*}
 
-Our uncertain version of Common Neighbor metric also shows competitive prediction accuracy, though it only outperforms weighted and original Common Neighbor metrics in PPI dataset. In the other two datasets, the results achieved by the uncertain version are very close to the best result achieved by the other two metrics.% We can still think our uncertain version of Common Neighbor metric is competitive.
+\begin{figure*}
+\centering
+\includegraphics[scale = 0.8]{\main/img/Results-Fig2.png}
+\caption{Comparison of the accuracy for link prediction with UCN and URA against SRW \cite{liu2010link} and LNB \cite{liu2011link}.}
+\label{experiment-result-image-link-2}
+\end{figure*}
+
+% \begin{table}[]
+% \centering
+% \caption{Algorithm List}
+% \label{algorithm-list-link}
+% \begin{tabular}{ccc}
+% \hline
+% Algorithm Name & Description                     \\ \hline
+% CN/RA      & Pay no attention to probabilities and use the original metrics.  \\
+% WCN/WRA       & Regard probability as weight and use weighted metrics.  \\
+% UCN/URA    & Use our uncertain version of graph proximity measures. \\ \hline
+% \end{tabular}
+% \end{table}
+
+% The prediction accuracy on the 3 networks are shown in Table \ref{experiment-result-link}.
+
+% \begin{table}[]
+% \centering
+% \caption{Results}
+% \label{experiment-result-link}
+% \begin{tabular}{c|c|c|c||c|c|c}
+% \hline
+% \multirow{2}{*}{Datasets} & \multicolumn{3}{c||}{Common Neighbor}              & \multicolumn{3}{c}{Resource Allocation} \\ \cline{2-7} 
+%                           & CN            & WCN             & UCN             & RA        & WRA      & URA               \\ \hline
+% PPI                       & 0.472         & 0.5045          & \textbf{0.5288} & 0.4123    & 0.45     & \textbf{0.5728}   \\ \hline
+% Enron                     & \textbf{0.53} & 0.51            & 0.51            & 0.43      & 0.35     & \textbf{0.51}     \\ \hline
+% Synthetic Network         & 0.586         & \textbf{0.5892} & 0.5764          & 0.5772    & 0.5832   & \textbf{0.5902}   \\ \hline
+% \end{tabular}
+% \end{table}
+
+From Table \ref{experiment-result-link} and Figure \ref{experiment-result-image-link-1}, we can observe that our uncertain version of the Common Neighbor and Resource Allocation metrics can significantly outperform their original and weighted ones when dealing with uncertain networks. This shows that in the task of link prediction with edge uncertainty, it is worthwhile to take every possible worlds into account. Considering uncertainties as weights and applying a weighted version of the metrics, while it improves over the original approach, it does not really take advantage of the notion of possible parallel worlds as our metric does.
+
+From Table \ref{experiment-result-link} and Figure \ref{experiment-result-image-link-2}, we can observe that our metrics (UCN and URA) can outperform the other four baseline methods on PPI and Synthetic datasets. The contenders are again the Local Random Walk with two different parameters and the Local Na\"{\i}ve Bayes model with either CN or RA. The Enron dataset allows the following observation: the Common Neighbor-based metrics seems to outperform the Resource Allocation-based counterparts on this dataset.  It seems that the Resource Allocation metrics are not good choices for Enron dataset. While our UCN wins the contest for Enron, it is understandable that LNB-CN, leveraging on Common Neighbors, slightly outshines our URA metric.
 
 \section{Conclusion}
-In this Chapter, we propose an uncertain version of graph proximity measures for the link prediction problem in uncertain networks. We propose a new algorithm to reduce the time complexity of computing uncertain version of graph proximity measures. By taking all possible worlds into consideration, the performance of link predictions are improved compared with original and weighted proximity measures.
+In this Chapter, we propose an uncertain version of graph proximity measures for the link prediction problem in uncertain networks. We propose a new algorithm to reduce the time complexity of computing the uncertain version of graph proximity measures. By taking all possible worlds into consideration, the performance of link predictions are improved compared with the original and weighted proximity measures.
+
+We have also shown the superiority of our approach for link prediction in uncertain networks compared to the state-of-the-art in link prediction. The contenders, however, do not take into account the existential probabilities of the edges and future work is to investigate how the local random walk or the local Na\"{\i}ve Bayes model could do that.
+We have shown the effectiveness of considering all possible worlds when using neighbor-based metrics to do link prediction. When proposing the uncertain version of other link prediction metrics, such as path-based and learning-based metrics, all possible worlds should also be considered, which would also be very time-consuming. To reduce time complexity, some variants of our algorithm may then be considered.
 
 \end{document}

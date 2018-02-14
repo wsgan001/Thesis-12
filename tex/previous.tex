@@ -62,8 +62,8 @@ Pfeiffer and Neville \cite{pfeiffer2010probabilistic} formulated a measure of ce
 
 \section{Link Prediction}\label{previous:link-prediction}
 %Link prediction is the problem of determining future or missing associations between entities in complex networks based on observed links. Because of its broad applications in different domains, link prediction has attracted increasing attention from computer scientists, biologists and physicists recently. Link prediction can be categorized into two classes: one is forecasting the future links, which can be used to help on-line social network users find new friends; the other is determining the hidden or unobserved relationships between nodes, such as protein-protein interaction networks and food webs. The discovery of interaction links in biological networks is usually expensive, therefore, finding the most promising latent links instead of checking all possible links is important in reducing experimental costs.
+In the past decade, many works have been done about link prediction in deterministic graphs, graphs where the network structure is exactly and deterministically known. There are many metrics available for computing the similarity of two nodes. According to the characteristics of these metrics, they can be divided into neighbor-based metrics \cite{newman2001clustering, salton1986introduction, jaccard1901etude, adamic2003friends, zhou2009predicting}, path-based metrics \cite{katz1953new,lu2009similarity} and random-walk-based metrics \cite{gobel1974random,liu2010link}. Furthermore, there are some learning-based methods \cite{liu2011link} that have been proposed in recent years.
 
-In the past decade, many works have been done about link prediction in deterministic graphs, graphs where the network structure is exactly and deterministically known. There are many metrics available for computing the similarity of two nodes. According to the characteristics of these metrics, they can be divided into neighbor-based metrics, path-based metrics, random-walk-based metrics and social theory-based metrics. Furthermore, there are some learning-based methods that have been proposed in recent years.
 \subsection{Neighbor-based Metrics} \label{neighbor-based-metrics}
 
 Among all approaches, neighbor-based metrics are the simplest yet effective to predict missing links. These metrics assume that two nodes are more likely to be connected if they have more common neighbors. Researchers design a lot of neighbor-based metrics for link prediction. Their definitions are as follows:
@@ -137,22 +137,25 @@ Where $P_{x,w}$ is the probability of stepping on node $\mathcal{V}_w$ from node
 CT(x,y) = HT(x,y) + HT(y,x)
 \end{equation}
 
-\textbf{Local-random-walk-based Index (LRWI)}: Local-random-walk-based Index is based on local random walk, which has lower computational complexity compared with other random-walk-based similarity metrics. It is defined as:
+\textbf{Local-random-walk-based Index (SRW)}: Local-random-walk-based Index \cite{liu2010link} is based on a local random walk, which has lower computational complexity compared with other random-walk-based similarity metrics. It is defined as:
 \begin{equation}
-s_{xy}=\frac{k(x)}{2|E|}\cdot \pi_{xy}(t) + \frac{k(y)}{2|E|}\cdot \pi_{yx}(t) 
+s_{xy}(t)=\frac{k(x)}{2|E|}\cdot \pi_{xy}(t) + \frac{k(y)}{2|E|}\cdot \pi_{yx}(t) 
 \end{equation}
-Here, $|E|$ is the number of links in the network. $k(x)$ is the degree of the node $\mathcal{V}_x$. $\pi_{xy}(t)$ is the probability that a random walker starts from node $\mathcal{V}_x$ and locates at node $\mathcal{V}_y$ after $t$ steps. $t$ is a tunable hyper-parameter. When $t=2$, this metric is the same as RA.
+\begin{equation}
+s_{xy}^{SRW}=\sum_{l=1}^{t}s_{xy}(t)
+\end{equation}
+Here, $|E|$ is the number of links in the network. $k(x)$ is the degree of the node $\mathcal{V}_x$. $\pi_{xy}(t)$ is the probability that a random walker starts from node $\mathcal{V}_x$ and locates at node $\mathcal{V}_y$ after $t$ steps. $t$ is a tunable hyper-parameter. When we predict missing links, we use $s_{xy}^{SRW}$ values ranking to predict the most promising latent links.
 
 %\textbf{Superposed-random-walk-based Index}
 \subsection{Learning-based Algorithms}
-\textbf{Local-Naive-Bayes-based Index (LNB)}: Liu et al. \cite{liu2011link} proposed a probabilistic model called local naive Bayes (LNB) based on the Bayes theory. Different to traditional methods in which each common neighbor contributes equally to the link likelihood, LNB considers that different common neighbors may play different roles in link prediction. The characteristic of the model is that two node pairs with same number of common neighbors could have different connection likelihoods. It is defined as:
+\textbf{Local-Na{\"\i}ve-Bayes-based Index (LNB)}: Liu et al. \cite{liu2011link} proposed a probabilistic model called local Na{\"\i}ve Bayes (LNB) based on the Bayes theory. Different to traditional methods in which each common neighbor contributes equally to the link likelihood, LNB considers that different common neighbors may play different roles in link prediction. The characteristic of the model is that two node pairs with same number of common neighbors could have different connection likelihoods. It is defined as:
 \begin{equation}
 s_{xy} = \sum_{w\in \Gamma(x)\cap\Gamma(y)}f(k(w))\log(sR_w)
 \end{equation}
-Here, $s=\frac{M}{M^T}-1$ ($M=\frac{|\mathcal{V}|(|\mathcal{V}|-1)}{2}$, $M^T=|\mathcal{E}|$), $R_w=\frac{N_{\triangle w}+1}{N_{\wedge w}+1}$ ($N_{\triangle w}$ and $N_{\wedge w}$ are respectively the number of connected and disconnected node pairs whose common neighbors include node $\mathcal{V}_w$). There are three forms of function $f$, namely $f(k(w))=1$, $f(k(w))=\frac{1}{\log k(w)}$ and $f(k(w))=\frac{1}{k(w)}$, which are corresponding to the Local Naive Bayes (LNB) form of CN, AA and RA metrics respectively.
+Here, $s=\frac{M}{M^T}-1$ ($M=\frac{|\mathcal{V}|(|\mathcal{V}|-1)}{2}$, $M^T=|\mathcal{E}|$), $R_w=\frac{N_{\triangle w}+1}{N_{\wedge w}+1}$ ($N_{\triangle w}$ and $N_{\wedge w}$ are respectively the number of connected and disconnected node pairs whose common neighbors include node $\mathcal{V}_w$). There are three forms of function $f$, namely $f(k(w))=1$, $f(k(w))=\frac{1}{\log k(w)}$ and $f(k(w))=\frac{1}{k(w)}$, which are corresponding to the Local Na{\"\i}ve Bayes (LNB) form of CN, AA and RA metrics respectively, and we name them as LNB-CN, LNB-AA and LNB-RA in Section 5.
 
 \subsection{Link Prediction Algorithms for Weighted Graphs}
-The above-mentioned similarity metrics only consider the binary relations among nodes; however, in the real world, links are naturally weighted, which may represent the amount of traffic load along connections in a transportation network or the number of co-authorized papers in a co-authorship network. Murata and Moriyasu \cite{murata2007link} proposed weighted similarity metrics as variants of Common Neighbors, Resource Allocation and Adamic-Adar. The definition of weighted metrics can also be checked in \cite{lu2010link}:
+The above-mentioned similarity metrics only consider the binary relations among nodes; however, in the real world, links are naturally weighted, which may represent the amount of traffic load along connections in a transportation network or the number of co-authorized papers in a co-authorship network. Murata and Moriyasu \cite{murata2007link} proposed weighted similarity metrics as variants of Common Neighbors, Resource Allocation and Adamic-Adar. The definition of the weighted metrics can also be examined in \cite{lu2010link}:
 
 %\subsection{For weighted networks}
 \textbf{Weighted Common Neighbors (WCN)}:
