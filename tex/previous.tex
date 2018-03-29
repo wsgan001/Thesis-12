@@ -10,7 +10,7 @@
 In this chapter, we review some of the related work relevant to this thesis. This thesis is mainly about the problems of entity ranking, link prediction and local community detection in uncertain networks. In deterministic networks, these problems have been fully studied, so we first review the existing algorithms in certain scenarios. There are also algorithms about complex network analysis in uncertain scenarios, we also summarize them briefly.
 
 \section{Centrality and Rank}
-A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph’s structure. Here are some of the key centrality measures from the literature.
+A measure of centrality on a graph aims to assign a ranking or magnitude to each node that captures the relative importance of that node in the context of the graph's structure. Here are some of the key centrality measures from the literature.
 \subsection{Degree Centrality}
 Degree centrality is one of the simplest centrality measures. It is defined as the number of edges a node $\mathcal{V}_i$ has, $deg(i)$. It can be normalized by the maximal possible degree, $n-1$, to obtain a number between 0 and 1:
 \begin{equation}
@@ -47,7 +47,7 @@ AC^{eig}=\lambda C^{eig}
 \end{equation}
 where $C^{eig} = (c^{eig}(1),c^{eig}(2),...,c^{eig}(n))$; $A=(a_{i,j})$ is the adjacency matrix, i.e. $a_{i,j}=1$ if node $\mathcal{V}_i$ is linked to node $\mathcal{V}_j$, and $a_{i,j}=0$ otherwise.
 
-The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the first algorithm that was used by the company, and it is the best-known.
+The most famous variant of eigenvector centrality is Google's PageRank algorithm \cite{page1999pagerank}: webpages rank highly in Google’s search results if they are linked from other webpages of high rank. It is not the only algorithm used by Google to order search engine results, but it is the best-known.
 
 \subsection{Centrality Measures in Uncertain Graphs} \label{CMIUG} 
 In order to model the effect of relationship uncertainty on network connectivity, Sevon et al. \cite{sevon2006link} developed a method for biological databases. They proposed to transform the probabilities into weights by taking the negative logarithm of the probabilities:
@@ -103,10 +103,10 @@ Other similar normalized metrics include:
 s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{|\Gamma(x)|+|\Gamma(y)|}
 \end{equation}
 
-\textbf{Salton Cosine Similarity (SC)} \cite{salton1986introduction}
-\begin{equation}
-s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{\sqrt[]{|\Gamma(x)|\cdot|\Gamma(y)|}}
-\end{equation}
+% \textbf{Salton Cosine Similarity (SC)} \cite{salton1986introduction}
+% \begin{equation}
+% s_{xy}=\frac{|\Gamma(x)\cap\Gamma(y)|}{\sqrt[]{|\Gamma(x)|\cdot|\Gamma(y)|}}
+% \end{equation}
 
 Other neighbor-based metrics include Hub Promoted Index (HPI) \cite{ravasz2002hierarchical}, Hub Depressed Index (HDI) \cite{zhou2009predicting}, Leicht-Holme-Newman Index (LHNI) \cite{leicht2006vertex} and Preferential Attachment (PA) \cite{barabasi2002evolution}.
 \subsection{Path-based Metrics}
@@ -124,7 +124,7 @@ s_{xy}=A^2 + \alpha A^3
 \end{equation}
 
 \subsection{Random-walk-based Metrics}
-Social interactions between nodes in social networks can also be modeled by random walk, which uses transition probabilities from a node to its neighbors to denote the destination of a random walker from current node. The whole process is a Markov chain describing the sequence of nodes visited by a random walker. There exists some link prediction metrics which calculate similarities between nodes based on random walk.
+Social interactions between nodes in social networks can also be modeled by random walks, which use transition probabilities from a node to its neighbors to denote the destination of a random walker from current node. The whole process is a Markov chain describing the sequence of nodes visited by a random walker. There exists some link prediction metrics which calculate similarities between nodes based on random walk.
 
 \textbf{Hitting Time (HT)}: \cite{gobel1974random} $HT(x, y)$ is the expected number of steps required for a random walk from node $\mathcal{V}_x$ to node $\mathcal{V}_y$. It is defined as follows:
 \begin{equation}
@@ -148,7 +148,7 @@ Here, $|E|$ is the number of links in the network. $k(x)$ is the degree of the n
 
 %\textbf{Superposed-random-walk-based Index}
 \subsection{Learning-based Algorithms}
-\textbf{Local-Na{\"\i}ve-Bayes-based Index (LNB)}: Liu et al. \cite{liu2011link} proposed a probabilistic model called local Na{\"\i}ve Bayes (LNB) based on the Bayes theory. Different to traditional methods in which each common neighbor contributes equally to the link likelihood, LNB considers that different common neighbors may play different roles in link prediction. The characteristic of the model is that two node pairs with same number of common neighbors could have different connection likelihoods. It is defined as:
+\textbf{Local-Na{\"\i}ve-Bayes-based Index (LNB)}: Liu et al. \cite{liu2011link} proposed a probabilistic model called local Na{\"\i}ve Bayes (LNB) based on Bayes theorem. Different to traditional methods in which each common neighbor contributes equally to the link likelihood, LNB considers that different common neighbors may play different roles in link prediction. The characteristic of the model is that two node pairs with same number of common neighbors could have different connection likelihoods. It is defined as:
 \begin{equation}
 s_{xy} = \sum_{w\in \Gamma(x)\cap\Gamma(y)}f(k(w))\log(sR_w)
 \end{equation}
@@ -176,9 +176,9 @@ s_{xy}=\sum_{z\in \Gamma(x)\cap\Gamma(y)}\frac{w(x,z)+w(y,z)}{\log(1+s(z))}
 Here, $w(x, y) = w(y, x)$ denotes the weight of the link between nodes $\mathcal{V}_x$ and $\mathcal{V}_y$, and $s(x)=\sum_{z\in\Gamma(x)}w(x,z)$ is the strength of node $\mathcal{V}_x$.
 
 \subsection{Link Prediction Algorithms for Uncertain Graphs}
-Mallek et al. \cite{mallek2016evidential} proposed to use belief function theory to deal with uncertain social networks. Belief function network is considered as a generalization of the probability theory, and one of its uses is the representation and management of missing information. It provides tools for combining of evidence induced from several pieces of information. The approach proposed by Mallek combines sampling techniques and information fusion and returns good results in real-life settings. It used popular structural measures based on local graph information to compute distances between the links, and a fusion procedure was subsequently applied taking into account the reliability of the sources to predict missing links.
+Mallek et al. \cite{mallek2016evidential} proposed to use belief function theory to deal with uncertain social networks. Belief function network is considered as a generalization of the probability theory, and one of its uses is the representation and management of missing information. It provides tools for combining evidence induced from several pieces of information. The approach proposed by Mallek combines sampling techniques and information fusion and returns good results in real-life settings. It used popular structural measures based on local graph information to compute distances between the links, and a fusion procedure was subsequently applied taking into account the reliability of the sources to predict missing links.
 
-Ahmed et al. \cite{ahmed2016efficient} investigated the problem of link prediction in dynamic uncertain networks, he designed a new method based on a random walk in temporal uncertain networks. His method first transformed the link prediction problem in uncertain networks to a random walk in a deterministic network. Then, the similarity scores between a node and its neighbors were calculated within a sub-graph around this node to reduce the computational time. He also extended the method for solving link prediction in temporal uncertain networks. The proposed method integrated time and global topological information and obtained accurate results.
+Ahmed and Chen \cite{ahmed2016efficient} investigated the problem of link prediction in dynamic uncertain networks, they designed a new method based on a random walk in temporal uncertain networks. Their method first transformed the link prediction problem in uncertain networks to a random walk in a deterministic network. Then, the similarity scores between a node and its neighbors were calculated within a sub-graph around this node to reduce the computational time. They also extended the method for solving link prediction in temporal uncertain networks. The proposed method integrated time and global topological information and obtained accurate results.
 
 \newpage
 
@@ -246,7 +246,7 @@ There are also algorithms that work with a different strategy, which is not base
 \subsection{Community Detection Algorithms for Uncertain Graphs}
 To deal with uncertain networks, one simple idea is thresholding: we assume that edges exist whenever their probability exceeds a certain threshold that we choose. Krogan et al. \cite{krogan2006global} first converted the uncertain network into a conventional binary network based on this idea, then applied traditional community detection algorithms to the conventional binary network. While this technique can certainly reveal useful information, it has some drawbacks. First, there is the issue of the choice of the threshold level. Krogan et al. used a value of 0.273 for their threshold, but there is little doubt that their results would be different if they had chosen a different value, and we have the question what threshold should we choose if we have a totally different uncertain network. Second, thresholding throws away potentially useful information. There is a substantial difference between an edge with probability 0.3 and an edge with probability 0.9, but the distinction is lost if one applies a threshold at 0.273.
 
-Dahlin et al. \cite{dahlin2011method} proposed a method which is based on sampling. The method mainly has three steps. Firstly, he samples candidate networks from the ensemble of deterministic networks that are consistent with the available information about the uncertain networks using Monte Carlo methods. Then, standard community detection methods can be applied to candidate networks. Lastly, he merges candidate communities into the most probable community structure of the uncertain network. This method also has its shortcomings. To get reliable communities, one needs to sample enough candidate networks, which will result in high computation complexity.
+Dahlin and Svenson \cite{dahlin2011method} proposed a method which is based on sampling. The method mainly has three steps. Firstly, they samples candidate networks from the ensemble of deterministic networks that are consistent with the available information about the uncertain networks using Monte Carlo methods. Then, standard community detection methods can be applied to candidate networks. Lastly, they merges candidate communities into the most probable community structure of the uncertain network. This method also has its shortcomings. To get reliable communities, one needs to sample enough candidate networks, which will result in high computation complexity.
 
 Liu et al. \cite{liureliable} proposed a generalized reliability criterion from two basic intuitions (purity and size balance) to overcome the challenges from standard reliability criterion, and developed a novel k-means algorithm to solve the uncertain clustering problem. The criterion is designed from an information-theoretic perspective, and the use of such a criterion enables the design of an extremely simple and efficient version of the k-means algorithm, while retaining the desired qualitative properties.
 
